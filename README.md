@@ -8,7 +8,6 @@ A fantasy football application for La Liga (Spanish top football division) built
 - **Frontend**: React
 - **Database**: PostgreSQL 15
 - **Data Processing**: Python (pandas, BeautifulSoup)
-- **Authentication**: JWT
 
 ## Project Structure
 
@@ -128,12 +127,38 @@ LaLiga-Fantasy/
 - `position` (VARCHAR)
 - `goals`, `assists`, `minutes` (INT)
 - `expected_goals`, `expected_assists` (DECIMAL)
+- `points` (INT)
+- `image_url` (VARCHAR)
 - And more stats...
 
-### User Teams Table
+### Dream Teams Table
 - `id` (SERIAL PRIMARY KEY)
 - `user_id` (INT)
+- `team_name` (VARCHAR)
+- `formation` (VARCHAR)
+- `captain_id` (INT - FK to players)
+- `vice_captain_id` (INT - FK to players)
+- `total_points` (INT)
+- `created_at`, `updated_at` (TIMESTAMP)
+
+### Dream Team Players Table
+- `id` (SERIAL PRIMARY KEY)
+- `dream_team_id` (INT - FK to dream_teams)
 - `player_id` (INT - FK to players)
+- `position` (VARCHAR)
+- `squad_order` (INT)
+- `created_at`, `updated_at` (TIMESTAMP)
+
+### Match Stats Table
+- `id` (SERIAL PRIMARY KEY)
+- `match_id` (INT)
+- `home_team` (VARCHAR)
+- `away_team` (VARCHAR)
+- `home_goals` (INT)
+- `away_goals` (INT)
+- `match_date` (DATE)
+- `season` (VARCHAR)
+- And more match details...
 
 ## API Endpoints
 
@@ -143,20 +168,36 @@ LaLiga-Fantasy/
 - `GET /api/players/team/:team` - Get players by team
 - `GET /api/players/position/:position` - Get players by position
 
-### Teams
-- `GET /api/teams` - Get all teams
-- `POST /api/teams` - Create new team
-- `GET /api/teams/:userId` - Get user's team
+### Dream Teams
+- `POST /api/dreamteams` - Create a new dream team
+- `GET /api/dreamteams/:userId` - Get all teams for a user
+- `GET /api/dreamteams/:teamId` - Get specific dream team with players and stats
+- `PUT /api/dreamteams/:teamId` - Update dream team (name, formation, captain)
+- `DELETE /api/dreamteams/:teamId` - Delete a dream team
 
-### Auth
-- `POST /api/auth/login` - User login
-- `POST /api/auth/register` - User registration
+### Dream Team Players
+- `POST /api/dreamteams/:teamId/players` - Add player to team
+- `GET /api/dreamteams/:teamId/players` - Get all players in team
+- `PUT /api/dreamteams/:teamId/players/:playerId` - Update player position/squad order
+- `DELETE /api/dreamteams/:teamId/players/:playerId` - Remove player from team
+
+### Team Statistics
+- `GET /api/dreamteams/:teamId/stats` - Get team total points and composition
+- `GET /api/dreamteams/:teamId/stats/points` - Get detailed team statistics
+
+### Matches
+- `GET /api/matches` - Get all matches
+- `GET /api/matches/:season` - Get matches by season
+- `GET /api/matches/team/:teamName` - Get matches for a specific team
 
 ## Features (In Progress)
 
+- [x] Dream team creation & management
+- [x] Add/remove players from teams
+- [x] Team statistics & total points calculation
+- [x] Match statistics tracking
+- [x] Player data aggregation
 - [ ] User authentication & profiles
-- [ ] Fantasy team creation & management
-- [ ] Player statistics dashboard
 - [ ] League standings
 - [ ] Player comparison tools
 - [ ] Weekly matchweek updates
@@ -170,8 +211,6 @@ DB_PORT=5432
 DB_NAME=laliga_fantasy
 DB_USER=postgres
 DB_PASSWORD=your_password
-
-JWT_SECRET=your_secret_key
 
 NODE_ENV=development
 PORT=5000
