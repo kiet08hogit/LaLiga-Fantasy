@@ -1,4 +1,4 @@
-import { getUserTeam, addPlayerToTeam } from '../db/players.js';
+import { getUserTeam, addPlayerToUserTeam } from '../db/dreamteam.js';
 import pool from '../db/pool.js';
 
 export const getUserTeamController = async (req, res) => {
@@ -18,7 +18,7 @@ export const addPlayerToTeamController = async (req, res) => {
     if (!playerId) {
       return res.status(400).json({ error: 'playerId is required' });
     }
-    const result = await addPlayerToTeam(userId, playerId);
+    const result = await addPlayerToUserTeam(userId, playerId);
     res.json({ message: 'Player added to your team', result });
   } catch (err) {
     res.status(500).json({ error: err.message });

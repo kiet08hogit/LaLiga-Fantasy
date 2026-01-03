@@ -1,4 +1,4 @@
-import { getAllPlayers, getPlayerbyName, getPlayerbyTeam, getPlayerbyPossition } from '../db/players.js';
+import { getAllPlayers, getPlayerbyName, getPlayerbyTeam, getPlayerbyPosition, getPlayerbyNation, getPlayersbyId} from '../db/players.js';
 
 export const getAllPlayersController = async (req, res) => {
   try {
@@ -32,7 +32,7 @@ export const getPlayersByTeamController = async (req, res) => {
 
 export const getPlayersByPositionController = async (req, res) => {
   try {
-    const players = await getPlayerbyPossition(req.params.position);
+    const players = await getPlayerbyPosition(req.params.position);
     res.json(players);
   } catch (err) {
     res.status(500).json({ error: err.message });
