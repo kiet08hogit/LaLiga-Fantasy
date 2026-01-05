@@ -1,0 +1,178 @@
+.nav-bar { 
+    background: #001f3f; 
+    opacity: 0.9;
+    width: 100px; 
+    height: 100vh; 
+    position: fixed; 
+    left: 0; 
+    top: 0;
+    z-index: 3;  
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.9);
+    
+    .logo{
+        padding: 8px 10px; 
+        
+        img { 
+            display: block; 
+            margin: 3px auto; 
+            margin-left: 15px;
+            width: 70px; 
+            height: auto;
+            
+            &.sub-logo { 
+                width: 95px; 
+                margin-left: 0;
+                margin-top: 5px;
+            }
+        }
+    }
+    nav { 
+        display: flex; 
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start; 
+        padding-left: 0;
+        padding-top: 30px;
+        flex-grow: 1;
+        gap: 100px;
+        a { 
+            font-size: 22px; 
+            color: #f0f0f083;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0; 
+            position: relative; 
+            text-decoration: none; 
+
+            i { 
+                transition: all 0.3s ease-out; 
+            }
+
+            &:hover { 
+                color: #fff;
+                
+                svg { 
+                    opacity: 0; 
+                }
+
+                &:after { 
+                    opacity: 1; 
+                }
+            }
+
+            &:after { 
+                content: ""; 
+                font-size: 12px; 
+                letter-spacing: 1px; 
+                position: absolute; 
+                bottom: -20px; 
+                display: block; 
+                width: 100%; 
+                text-align: center; 
+                opacity: 0; 
+                transition: all 0.3s ease-out;
+                white-space: nowrap;
+            }
+
+            &:first-child { 
+                &::after { 
+                    content: 'HOME'; 
+                }
+            }
+        }
+
+        a.teams-link { 
+            &:after { 
+                content: "TEAMS";
+            }
+        }
+
+        a.search-link { 
+            &:after { 
+                content: "SEARCH";
+            }
+        }
+
+        a.position-link { 
+            &:after { 
+                content: "POSITION"; 
+            }
+        }
+        a.matchstats-link { 
+            &:after { 
+                content: "STATS"; 
+            }
+        }
+
+        a.trophy-link { 
+            &:after { 
+                content: "CHAMPIONS"; 
+            }
+        }
+
+        a.active{
+            svg{
+                color: #fff; 
+            }
+        }
+    }
+}
+.hamburger-icon, 
+.close-icon { 
+    display: none;
+}
+@media screen and (max-width: 1000px){
+    .nav-bar{
+        width: 60px;
+        
+        .logo img {
+            width: 50px;
+            margin-left: 0;
+        }
+
+        nav{
+            display: flex;
+            flex-direction: column;
+            padding-top: 20px;
+            gap: 20px;
+
+            a {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin: 0;
+                padding: 0;
+            }
+
+            a:after{
+                opacity: 1;
+                position: absolute;
+                bottom: -25px;
+                width: auto;
+                margin: 0;
+                font-size: 10px;
+            }
+
+            a svg {
+                opacity: 1 !important;
+            }
+
+            &.mobile-show { 
+                display: flex;
+            }
+        }
+        .hamburger-icon, 
+        .close-icon {
+            display: none;
+            position: absolute; 
+            top: 15px; 
+            right: 15px; 
+        }
+
+    }
+  }
+  

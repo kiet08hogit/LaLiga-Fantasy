@@ -1,0 +1,168 @@
+.livestats-container {
+    padding: 40px 20px;
+    min-height: 100vh;
+    position: relative;
+
+    .text-zone {
+        position: absolute;
+        top: 80px;
+        left: 10%;
+        width: 40%;
+
+        h1 {
+            color: #fff;
+            font-size: 3.2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        p {
+            color: #8B6914;
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+    }
+
+    .matches-container {
+        margin-top: 200px;
+        width: 100%;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+
+        .matches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .match-card {
+            background: linear-gradient(135deg, rgba(0, 31, 63, 0.9), rgba(139, 105, 20, 0.1));
+            border: 2px solid #8B6914;
+            border-radius: 12px;
+            padding: 25px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+
+            &:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 20px rgba(196, 167, 71, 0.3);
+            }
+
+            .match-status {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 20px;
+
+                .status-badge {
+                    background: #C4A747;
+                    color: #001f3f;
+                    padding: 6px 12px;
+                    border-radius: 20px;
+                    font-weight: 700;
+                    font-size: 0.85rem;
+                    text-transform: uppercase;
+                }
+
+                .minute {
+                    color: #C4A747;
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                }
+            }
+
+            .match-score {
+                display: flex;
+                align-items: center;
+                justify-content: space-around;
+                margin-bottom: 20px;
+                gap: 20px;
+
+                .team {
+                    flex: 1;
+                    text-align: center;
+
+                    h3 {
+                        color: #fff;
+                        font-size: 1.1rem;
+                        margin-bottom: 10px;
+                        font-weight: 600;
+                    }
+
+                    .score {
+                        color: #C4A747;
+                        font-size: 2.5rem;
+                        font-weight: 700;
+                        margin: 0;
+                    }
+                }
+
+                .divider {
+                    color: #8B6914;
+                    font-weight: 700;
+                    font-size: 1rem;
+                }
+            }
+
+            .match-stats {
+                .stats-btn {
+                    width: 100%;
+                    padding: 10px;
+                    background: transparent;
+                    border: 2px solid #8B6914;
+                    color: #8B6914;
+                    border-radius: 6px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+
+                    &:hover {
+                        background: #8B6914;
+                        color: #fff;
+                    }
+                }
+            }
+        }
+
+        .no-matches {
+            text-align: center;
+            color: #8B6914;
+            font-size: 1.2rem;
+            padding: 40px;
+        }
+
+        p {
+            color: #8B6914;
+            text-align: center;
+        }
+    }
+}
+
+@media (max-width: 1000px) {
+    .livestats-container {
+        .text-zone {
+            position: relative;
+            width: 100%;
+            left: 0;
+            top: 0;
+            margin-bottom: 30px;
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+        }
+
+        .matches-container {
+            margin-top: 20px;
+
+            .matches-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    }
+}
