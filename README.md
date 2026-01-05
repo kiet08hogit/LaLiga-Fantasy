@@ -1,13 +1,16 @@
 # La Liga Fantasy
 
-A fantasy football application for La Liga (Spanish top football division) built with Node.js backend, React frontend, and PostgreSQL database.
+A fantasy football application for La Liga (Spanish top football division) with interactive 3D visualization, live match statistics, and player data management. Built with Node.js backend, React frontend, and PostgreSQL database.
 
 ## Tech Stack
 
 - **Backend**: Node.js + Express.js
-- **Frontend**: React
-- **Database**: PostgreSQL 15
-- **Data Processing**: Python (pandas, BeautifulSoup)
+- **Frontend**: React + Three.js (3D animations)
+- **Styling**: SCSS with responsive design
+- **Database**: PostgreSQL
+- **External APIs**: RapidAPI Football API
+- **Icons**: FontAwesome
+- **Data Processing**: Python
 
 ## Project Structure
 
@@ -15,35 +18,89 @@ A fantasy football application for La Liga (Spanish top football division) built
 LaLiga-Fantasy/
 ├── backend/                    # Node.js API server
 │   ├── src/
-│   │   ├── controllers/       # Request handlers
-│   │   ├── routes/            # API routes
-│   │   ├── middleware/        # Custom middleware
-│   │   ├── db/                # Database queries
-│   │   ├── models/            # Data models
-│   │   └── index.js           # Server entry point
-│   ├── teamdata/              # Python data processing
-│   │   ├── main.py            # Consolidated data processing script
-│   │   └── laliga_dataset/    # CSV data files
+│   │   ├── controllers/
+│   │   │   ├── dreamteamController.js    # Dream team operations
+│   │   │   ├── playerController.js       # Player data
+│   │   │   ├── matchstatsController.js   # Match statistics
+│   │   │   └── liveStatsController.js    # Live match stats (RapidAPI)
+│   │   ├── routes/
+│   │   │   ├── dreamteamRoutes.js
+│   │   │   ├── playerRoutes.js
+│   │   │   ├── matchRoutes.js
+│   │   │   └── liveStatsRoutes.js        # Live stats endpoints
+│   │   ├── db/
+│   │   │   ├── pool.js                   # PostgreSQL connection pool
+│   │   │   ├── schema.js                 # Database schema
+│   │   │   ├── dreamteam.js
+│   │   │   ├── matchstats.js
+│   │   │   └── players.js
+│   │   ├── middleware/                   # CORS and auth middleware
+│   │   └── index.js                      # Server entry point
+│   ├── teamdata/
+│   │   ├── main.py                       # Data processing script
+│   │   └── laliga_dataset/               # CSV data files
+│   ├── .env                              # Environment variables
 │   └── package.json
 │
 ├── frontend/                   # React application
 │   ├── src/
-│   │   ├── components/        # Reusable UI components
-│   │   ├── pages/             # Full page views
-│   │   ├── services/          # API calls
-│   │   ├── hooks/             # Custom React hooks
-│   │   ├── context/           # State management
-│   │   ├── styles/            # CSS stylesheets
-│   │   ├── utils/             # Helper functions
-│   │   ├── App.jsx
-│   │   └── index.jsx
-│   ├── public/                # Static assets
+│   │   ├── components/
+│   │   │   ├── AnimatedLetters/          # Text animation component
+│   │   │   ├── DataHandling/             # Data processing utilities
+│   │   │   ├── Home/                     # Homepage with ParticleBall
+│   │   │   ├── Layout/                   # Layout wrapper with Sidebar
+│   │   │   ├── LiveStats/                # Live match display (RapidAPI)
+│   │   │   ├── MatchStats/               # Match filtering & stats
+│   │   │   ├── ParticleBall/             # 3D confetti animation
+│   │   │   ├── Position/                 # Player positions view
+│   │   │   ├── Search/                   # Player search
+│   │   │   ├── Sidebar/                  # Navigation sidebar (left vertical)
+│   │   │   ├── TeamData/                 # Team player details
+│   │   │   └── Teams/                    # Team directory
+│   │   ├── data/
+│   │   │   ├── nations.json              # Nation data
+│   │   │   ├── positions.json            # Position data with images
+│   │   │   └── teams.json                # Team data with logos
+│   │   ├── assets/
+│   │   │   └── images/                   # La Liga team logos and assets
+│   │   ├── App.js                        # Main app component with routes
+│   │   ├── App.css                       # App styles
+│   │   ├── App.scss                      # App SCSS styles
+│   │   ├── App.test.js                   # App tests
+│   │   ├── index.js                      # Entry point
+│   │   ├── index.css                     # Global styles
+│   │   ├── logo.svg                      # Logo file
+│   │   ├── reportWebVitals.js            # Performance reporting
+│   │   └── setupTests.js                 # Test setup
+│   ├── public/                           # Static assets
+│   │   ├── index.html                    # HTML entry point
+│   │   ├── manifest.json                 # PWA manifest
+│   │   └── robots.txt                    # SEO robots file
 │   └── package.json
 │
-├── venv311/                   # Python virtual environment
-├── .gitignore                 # Git ignore rules
+├── venv311/                              # Python virtual environment
+├── .gitignore
 └── README.md
 ```
+
+## Features
+
+### ✨ Current Features
+- **Interactive 3D ParticleBall** - Golden confetti animation with mouse repulsion effect on homepage
+- **Live Match Statistics** - Real-time La Liga matches via RapidAPI Football API
+- **Match Filtering** - Filter matches by team and date range with navigation to player stats
+- **Team Directory** - Browse all La Liga teams with logos and details
+- **Player Positions** - View players organized by position with images
+- **Sidebar Navigation** - Vertical left sidebar with icon-based menu (Home, Teams, Match Stats, Positions, Trophy, Live Stats, Search)
+- **Responsive Design** - Mobile-friendly layout with responsive navigation
+- **Dream Team Management** - Create and manage custom team selections
+- **Auto-refresh** - Live stats update every 30 seconds
+
+### 🎯 In Development
+- **TeamData Integration** - View player statistics by team and position
+- **User Authentication** - User profiles and authentication
+- **Player Search** - Advanced player search and filtering
+- **League Standings** - Real-time La Liga standings
 
 ## Setup Instructions
 
@@ -65,22 +122,23 @@ LaLiga-Fantasy/
    npm install
    ```
 
-3. Set up environment variables:
-   ```bash
-   cp .env.example .env
+3. Create `.env` file with your configuration:
+   ```env
+   DB_USER=postgres
+   DB_HOST=localhost
+   DB_NAME=laliga_fantasy
+   DB_PASSWORD=your_password
+   DB_PORT=5432
+   NODE_ENV=development
+   RAPIDAPI_KEY=your_rapidapi_key
    ```
-   Update `.env` with your PostgreSQL credentials
 
-4. Create database tables:
+4. Start the development server:
    ```bash
-   npm run migrate
-   ```
-
-5. Start the server:
-   ```bash
-   npm start
+   npm run dev
    ```
    Server runs on `http://localhost:5000`
+   Database tables are created automatically on first run
 
 ### Frontend Setup
 
@@ -96,11 +154,11 @@ LaLiga-Fantasy/
 
 3. Start development server:
    ```bash
-   npm run dev
+   npm start
    ```
-   App runs on `http://localhost:5173`
+   App runs on `http://localhost:3000`
 
-### Data Processing (Python)
+### Python Data Processing (Optional)
 
 1. Navigate to data folder:
    ```bash
@@ -109,8 +167,11 @@ LaLiga-Fantasy/
 
 2. Activate virtual environment:
    ```bash
-   source venv311/Scripts/activate  # Windows
-   source venv311/bin/activate      # macOS/Linux
+   # Windows
+   ..\..\venv311\Scripts\activate
+   
+   # macOS/Linux
+   source ../../venv311/bin/activate
    ```
 
 3. Run data processing:
@@ -118,140 +179,167 @@ LaLiga-Fantasy/
    python main.py
    ```
 
-## Database Schema
+## Configuration
 
-### Players Table
-- `id` (SERIAL PRIMARY KEY)
-- `player_name` (VARCHAR)
-- `team` (VARCHAR)
-- `position` (VARCHAR)
-- `goals`, `assists`, `minutes` (INT)
-- `expected_goals`, `expected_assists` (DECIMAL)
-- `points` (INT)
-- `image_url` (VARCHAR)
-- And more stats...
+### Environment Variables
 
-### Dream Teams Table
-- `id` (SERIAL PRIMARY KEY)
-- `user_id` (INT)
-- `team_name` (VARCHAR)
-- `formation` (VARCHAR)
-- `captain_id` (INT - FK to players)
-- `vice_captain_id` (INT - FK to players)
-- `total_points` (INT)
-- `created_at`, `updated_at` (TIMESTAMP)
+**Backend (.env)**
+```env
+DB_USER=postgres              # PostgreSQL username
+DB_HOST=localhost             # Database host
+DB_NAME=laliga_fantasy        # Database name
+DB_PASSWORD=your_password     # Database password
+DB_PORT=5432                  # PostgreSQL port
+NODE_ENV=development          # Environment
+RAPIDAPI_KEY=your_key         # RapidAPI Football API key
+```
 
-### Dream Team Players Table
-- `id` (SERIAL PRIMARY KEY)
-- `dream_team_id` (INT - FK to dream_teams)
-- `player_id` (INT - FK to players)
-- `position` (VARCHAR)
-- `squad_order` (INT)
-- `created_at`, `updated_at` (TIMESTAMP)
+### Color Scheme
 
-### Match Stats Table
-- `id` (SERIAL PRIMARY KEY)
-- `match_id` (INT)
-- `home_team` (VARCHAR)
-- `away_team` (VARCHAR)
-- `home_goals` (INT)
-- `away_goals` (INT)
-- `match_date` (DATE)
-- `season` (VARCHAR)
-- And more match details...
+- **Primary**: #001f3f (Deep Navy Blue)
+- **Accent**: #8B6914 (Brown/Gold)
+- **Gold**: #C4A747 (Confetti Color)
 
 ## API Endpoints
 
-### Players
-- `GET /api/players` - Get all players
-- `GET /api/players/:id` - Get player by ID
-- `GET /api/players/team/:team` - Get players by team
-- `GET /api/players/position/:position` - Get players by position
+### Live Stats (RapidAPI Integration)
+- `GET /live-stats/live` - Current live matches
+- `GET /live-stats/standings` - La Liga standings
+- `GET /live-stats/fixtures?round=X` - Fixtures by round
 
 ### Dream Teams
-- `POST /api/dreamteams` - Create a new dream team
-- `GET /api/dreamteams/:userId` - Get all teams for a user
-- `GET /api/dreamteams/:teamId` - Get specific dream team with players and stats
-- `PUT /api/dreamteams/:teamId` - Update dream team (name, formation, captain)
-- `DELETE /api/dreamteams/:teamId` - Delete a dream team
+- `POST /dreamteam` - Create dream team
+- `GET /dreamteam/:id` - Get team details
+- `PUT /dreamteam/:id` - Update team
+- `DELETE /dreamteam/:id` - Delete team
 
-### Dream Team Players
-- `POST /api/dreamteams/:teamId/players` - Add player to team
-- `GET /api/dreamteams/:teamId/players` - Get all players in team
-- `PUT /api/dreamteams/:teamId/players/:playerId` - Update player position/squad order
-- `DELETE /api/dreamteams/:teamId/players/:playerId` - Remove player from team
+### Match Stats
+- `GET /matches` - Get all matches
+- `GET /matches/:team` - Get team matches
+- `GET /matchstats` - Get statistics
 
-### Team Statistics
-- `GET /api/dreamteams/:teamId/stats` - Get team total points and composition
-- `GET /api/dreamteams/:teamId/stats/points` - Get detailed team statistics
+### Players
+- `GET /players` - Get all players
+- `GET /players/:id` - Get player by ID
+- `GET /players/team/:team` - Get players by team
+- `GET /players/position/:position` - Get players by position
 
-### Matches
-- `GET /api/matches` - Get all matches
-- `GET /api/matches/:season` - Get matches by season
-- `GET /api/matches/team/:teamName` - Get matches for a specific team
+## Running the Application
 
-## Features (In Progress)
+### Development Mode
 
-- [x] Dream team creation & management
-- [x] Add/remove players from teams
-- [x] Team statistics & total points calculation
-- [x] Match statistics tracking
-- [x] Player data aggregation
-- [ ] User authentication & profiles
-- [ ] League standings
-- [ ] Player comparison tools
-- [ ] Weekly matchweek updates
-- [ ] User rankings/leaderboard
-
-## Environment Variables
-
-```env
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=laliga_fantasy
-DB_USER=postgres
-DB_PASSWORD=your_password
-
-NODE_ENV=development
-PORT=5000
+**Terminal 1 - Backend:**
+```bash
+cd backend
+npm run dev
 ```
+Server runs on `http://localhost:5000`
 
-## Available Scripts
+**Terminal 2 - Frontend:**
+```bash
+cd frontend
+npm start
+```
+App runs on `http://localhost:3000`
 
-### Backend
-- `npm start` - Run server
-- `npm run dev` - Run with nodemon (auto-reload)
-- `npm run migrate` - Run database migrations
+## Key Components
 
-### Frontend
-- `npm run dev` - Start dev server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
+### ParticleBall (Home Page)
+- Interactive 3D confetti animation using Three.js
+- 1200 particles with individual floating motion
+- Mouse repulsion with smooth damping and spring physics
+- Automatic rotation with responsive interaction
+- Dimensions: 3-6px confetti pieces with scatter effect
 
-## Data Processing
+### MatchStats (Filter & View)
+- Team selection dropdown
+- Date range filtering (All, Home, Away, Win, Loss, Draw)
+- Navigates to TeamData with selected team and filter
+- Real-time match display
 
-The `backend/teamdata/main.py` script provides:
-1. **Fix date format** - Convert DD/MM/YY to MM/DD/YYYY
-2. **Aggregate player stats** - Convert per-game stats to season totals
-3. **View match data** - Display match information
-4. **View player stats** - Show player statistics
+### LiveStats (Live Matches)
+- Auto-refreshes every 30 seconds
+- Displays current La Liga matches
+- Shows team names, scores, and match status
+- RapidAPI Football API integration (LA_LIGA_ID = 140)
+- Error handling for API failures
 
-Run `python main.py` for interactive menu.
+### Sidebar Navigation
+- Vertical 100px-wide sidebar
+- Icon-based navigation with FontAwesome icons
+- Mobile-responsive hamburger menu
+- Routes: Home, Teams, Match Stats, Position, Trophy, Live Stats, Search
+- Smooth transitions and hover effects
+
+## Database Schema
+
+### Key Tables
+- **players** - Player information and statistics
+- **dream_teams** - User's custom team selections
+- **dream_team_players** - Players in each dream team
+- **match_stats** - Match results and statistics
+- **teams** - La Liga team data
 
 ## Contributing
 
-1. Create a feature branch: `git checkout -b feature/your-feature`
-2. Commit changes: `git commit -m "Add feature"`
-3. Push to branch: `git push origin feature/your-feature`
-4. Open a pull request
+1. Create a feature branch:
+   ```bash
+   git checkout -b feature/your-feature
+   ```
+
+2. Make your changes and commit:
+   ```bash
+   git add .
+   git commit -m "Add feature description"
+   ```
+
+3. Push to your branch:
+   ```bash
+   git push origin feature/your-feature
+   ```
+
+4. Merge to main when ready:
+   ```bash
+   git checkout main
+   git merge feature/your-feature
+   ```
+
+## Development Notes
+
+- **Port Configuration**: Frontend (3000), Backend (5000)
+- **RapidAPI**: Requires valid Football API key for live stats
+- **Three.js**: Used for 3D particle animations with auto-refresh every 30 seconds
+- **CORS**: Enabled for frontend-backend communication
+- **Database**: Auto-initializes tables on first connection
+- **Particle Physics**: Damping (0.92), Spring Force (0.08), Repulsion Radius (2.5)
+
+## Troubleshooting
+
+### Backend won't start
+- Check PostgreSQL is running
+- Verify `.env` credentials are correct
+- Ensure port 5000 is not in use
+
+### Frontend can't connect to backend
+- Verify backend is running on port 5000
+- Check CORS is enabled in Express
+- Ensure `localhost:5000` is accessible
+
+### LiveStats shows no data
+- Verify RAPIDAPI_KEY is set in `.env`
+- Check RapidAPI Football API subscription is active
+- Verify internet connection
+- Check La Liga ID (140) is correct
+
+### ParticleBall not showing animation
+- Ensure Three.js is properly installed
+- Check WebGL support in browser
+- Verify GPU acceleration is enabled
 
 ## License
 
 MIT
 
-## Notes
+## Author
 
-- Database uses PostgreSQL 15
-- CSV data files stored in `backend/teamdata/laliga_dataset/`
-- Python virtual environment configured in `venv311/`
-- All sensitive data (API keys, DB credentials) should be in `.env` files
+La Liga Fantasy Development Team
