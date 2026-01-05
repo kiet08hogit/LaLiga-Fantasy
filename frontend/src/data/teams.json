@@ -1,0 +1,84 @@
+{
+    "teams": [
+        {
+            "cover": "/teams/Real_Madrid_CF.svg", 
+            "title": "Real-Madrid"
+        }, 
+        {
+            "cover": "/teams/FC_Barcelona_(crest).svg", 
+            "title": "Barcelona"
+        },
+        {
+            "cover": "/teams/Aletico Madrid.svg", 
+            "title": "Atletico-Madrid"
+        },
+        {
+            "cover": "/teams/Valenciacf.svg", 
+            "title": "Valencia"
+        },
+        {
+            "cover": "/teams/Real_Sociedad_logo.svg", 
+            "title": "Real-Sociedad"
+        },
+        {
+            "cover": "/teams/Sevilla_FC_logo.svg", 
+            "title": "Sevilla"
+        },
+        {
+            "cover": "/teams/Villarreal_CF_logo-en.svg", 
+            "title": "Villarreal"
+        }, 
+        {
+            "cover": "/teams/Real_betis_logo.svg", 
+            "title": "Real-Betis"
+        },
+        {
+            "cover": "/teams/CA_Osasuna_2024_crest.svg", 
+            "title": "Osasuna"
+        },
+        {
+            "cover": "/teams/Rayo_Vallecano_logo.svg", 
+            "title": "Rayo-Vallecano"
+        },
+        {
+            "cover": "/teams/RC_Celta_de_Vigo_logo.svg.png", 
+            "title": "Celta-Vigo"
+        },
+        {
+            "cover": "/teams/Club_Athletic_Bilbao_logo.svg", 
+            "title": "Athletic-Bilbao"
+        },
+        {
+            "cover": "/teams/Rcd_mallorca.svg", 
+            "title": "Mallorca"
+        },
+        {
+            "cover": "/teams/Getafe_logo.svg", 
+            "title": "Getafe"
+        },
+        {
+            "cover": "/teams/UD_Las_Palmas_logo.svg", 
+            "title": "Las-Palmas"
+        },
+        {
+            "cover": "/teams/Club_Deportivo_Leganés_logo.svg", 
+            "title": "Leganes"
+        },
+        {
+            "cover": "/teams/Real_Valladolid_CF_crest.svg", 
+            "title": "Real-Valladolid"
+        },
+        {
+            "cover": "/teams/Girona_FC_Logo.svg", 
+            "title": "Girona-FC"
+        },
+        {
+            "cover": "/teams/Deportivo_Alaves_logo_(2020).svg", 
+            "title": "Alaves"
+        },
+        {
+            "cover": "/teams/RCD_Espanyol_crest.svg", 
+            "title": "Espanyol"
+        }
+    ]
+}

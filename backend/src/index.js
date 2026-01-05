@@ -3,9 +3,9 @@ import cors from 'cors';
 import pool from './db/pool.js';
 import { initializeDatabase } from './db/schema.js';
 import playerRoutes from './routes/playerRoutes.js';
-import teamRoutes from './routes/teamRoutes.js';
 import matchRoutes from './routes/matchRoutes.js';
 import dreamteamRoutes from './routes/dreamteamRoutes.js';
+import liveStatsRoutes from './routes/liveStatsRoutes.js';
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -30,9 +30,9 @@ app.get('/', (req, res) => {
 });
 
 app.use('/players', playerRoutes);
-app.use('/team', teamRoutes);
 app.use('/matches', matchRoutes);
 app.use('/dream-teams', dreamteamRoutes);
+app.use('/live-stats', liveStatsRoutes);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () =>
   console.log(`Server running on port ${PORT}`)
