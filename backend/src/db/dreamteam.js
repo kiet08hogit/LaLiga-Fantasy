@@ -62,7 +62,7 @@ export async function updateDreamTeam(teamId, { teamName, formation, captainId, 
   }
 
   if (updates.length === 0) {
-    return await getDreamTeamById(teamId); // Return current team if no updates
+    return await getDreamTeamById(teamId); 
   }
 
   updates.push(`updated_at = CURRENT_TIMESTAMP`);

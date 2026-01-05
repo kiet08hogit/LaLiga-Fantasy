@@ -6,10 +6,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// .env is at backend/.env relative to src/db -> up two levels
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
-// coerce and sanitize env values explicitly
 const DB_USER = process.env.DB_USER;
 const DB_HOST = process.env.DB_HOST;
 const DB_NAME = process.env.DB_NAME;

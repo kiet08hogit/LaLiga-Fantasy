@@ -1,0 +1,24 @@
+{
+    "positions": [
+        {
+            "cover": "/positions/janoblak.png", 
+            "title": "Goalie", 
+            "search": "GK"
+        }, 
+        {
+            "cover": "/positions/antoniedefend.webp", 
+            "title": "Defender", 
+            "search": "DF"
+        },
+        {
+            "cover": "/positions/bellinghammid.png", 
+            "title": "Midfielder", 
+            "search": "MF"
+        },
+        {
+            "cover": "/positions/mbappe vs yamal.webp", 
+            "title": "Forwards", 
+            "search": "FW"
+        }
+    ]
+}
