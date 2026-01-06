@@ -9,6 +9,7 @@ import MatchStats from "./components/MatchStats";
 import Position from "./components/Position";
 import Search from "./components/Search";
 import LiveStats from "./components/LiveStats";
+import Champion from './components/Champion';
 
 function App() {
   useEffect(() => {
@@ -26,7 +27,7 @@ function App() {
           <Route path="matchstats" element={<MatchStats />} />
           <Route path="position" element={<Position />} />
           <Route path="livestats" element={<LiveStats />} />
-          <Route path="champions" element={<TeamData />} />
+          <Route path="champions" element={<Champion />} />
           <Route path="search" element={<Search />} />
         </Route>
       </Routes>

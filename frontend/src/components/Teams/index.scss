@@ -2,9 +2,8 @@
     padding-left: 100px;
     padding-right: 50px;
     width: calc(100% - 150px);
-    position: initial;
-    height: 100%;
-    overflow-y: auto;
+    position: relative;
+    height: auto;
     overflow-x: hidden;
 
     h1.page-title {
@@ -152,8 +151,8 @@
             gap: 15px;
             padding-bottom: 100px;
             margin-left: -10px;
-            width:90vh;
-            height: 55vh;
+            width: 90vw;
+            height: auto;
           }
     }
 }
