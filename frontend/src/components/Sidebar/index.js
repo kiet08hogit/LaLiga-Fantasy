@@ -1,7 +1,7 @@
 import './index.scss'
 import { Link, NavLink } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHome, faSearch, faTshirt, faBars, faClose, faUsers, faChartBar, faTrophy, faBroadcastTower } from '@fortawesome/free-solid-svg-icons'
+import { faHome, faSearch, faTshirt, faBars, faClose, faUsers, faChartBar, faTrophy, faBroadcastTower, faUsersGear } from '@fortawesome/free-solid-svg-icons'
 import LogoPL from '../../assets/images/LaLiga_EA_Sports_2023_Vertical_Logo.svg'
 import LogoSubtitle from '../../assets/images/liga-espanola--sub logo.png'
 import { useState } from 'react'
@@ -18,6 +18,9 @@ const Sidebar = () => {
                 <NavLink exact="true" activeclassname = "active" to="/">
                     <FontAwesomeIcon icon = {faHome}  onClick={() => setShowNav(false)} />
                 </NavLink>
+                <NavLink exact="true" activeclassname = "active" className = "livestats-link" to="/livestats">
+                    <FontAwesomeIcon icon = {faBroadcastTower} onClick={() => setShowNav(false)} />
+                </NavLink>
                 <NavLink exact="true" activeclassname = "active" className = "teams-link" to="/teams">
                     <FontAwesomeIcon icon = {faUsers} onClick={() => setShowNav(false)}/>
                 </NavLink>
@@ -30,8 +33,8 @@ const Sidebar = () => {
                  <NavLink exact="true" activeclassname = "active" className = "trophy-link" to="/champions">
                     <FontAwesomeIcon icon = {faTrophy} onClick={() => setShowNav(false)} />
                 </NavLink>
-                <NavLink exact="true" activeclassname = "active" className = "livestats-link" to="/livestats">
-                    <FontAwesomeIcon icon = {faBroadcastTower} onClick={() => setShowNav(false)} />
+                <NavLink exact="true" activeclassname = "active" className = "dreamteam-link" to="/dreamteam">
+                    <FontAwesomeIcon icon = {faUsersGear} onClick={() => setShowNav(false)} />
                 </NavLink>
                 <NavLink exact="true" activeclassname = "active" className = "search-link" to="/search">
                     <FontAwesomeIcon icon = {faSearch} onClick={() => setShowNav(false)} />

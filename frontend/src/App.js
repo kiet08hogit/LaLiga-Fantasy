@@ -10,6 +10,7 @@ import Position from "./components/Position";
 import Search from "./components/Search";
 import LiveStats from "./components/LiveStats";
 import Champion from './components/Champion';
+import DreamTeam from './components/DreamTeam';
 
 function App() {
   useEffect(() => {
@@ -28,6 +29,7 @@ function App() {
           <Route path="position" element={<Position />} />
           <Route path="livestats" element={<LiveStats />} />
           <Route path="champions" element={<Champion />} />
+          <Route path="dreamteam" element={<DreamTeam />} />
           <Route path="search" element={<Search />} />
         </Route>
       </Routes>
