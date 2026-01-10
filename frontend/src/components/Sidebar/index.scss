@@ -37,7 +37,7 @@
         padding-left: 0;
         padding-top: 30px;
         flex-grow: 1;
-        gap: 100px;
+        gap: 95px;
         a { 
             font-size: 22px; 
             color: #f0f0f083;
@@ -104,13 +104,19 @@
         }
         a.matchstats-link { 
             &:after { 
-                content: "STATS"; 
+                content: "MATCH STATS"; 
             }
         }
 
         a.trophy-link { 
             &:after { 
                 content: "CHAMPIONS"; 
+            }
+        }
+
+        a.dreamteam-link { 
+            &:after { 
+                content: "DREAM TEAM"; 
             }
         }
 
