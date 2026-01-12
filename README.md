@@ -46,7 +46,9 @@ LaLiga-Fantasy/
 │   ├── src/
 │   │   ├── components/
 │   │   │   ├── AnimatedLetters/          # Text animation component
+│   │   │   ├── Champion/                 # Championship/trophy display
 │   │   │   ├── DataHandling/             # Data processing utilities
+│   │   │   ├── DreamTeam/                # Dream team builder with formation layout
 │   │   │   ├── Home/                     # Homepage with ParticleBall
 │   │   │   ├── Layout/                   # Layout wrapper with Sidebar
 │   │   │   ├── LiveStats/                # Live match display (RapidAPI)
@@ -58,7 +60,6 @@ LaLiga-Fantasy/
 │   │   │   ├── TeamData/                 # Team player details
 │   │   │   └── Teams/                    # Team directory
 │   │   ├── data/
-│   │   │   ├── nations.json              # Nation data
 │   │   │   ├── positions.json            # Position data with images
 │   │   │   └── teams.json                # Team data with logos
 │   │   ├── assets/
@@ -69,13 +70,16 @@ LaLiga-Fantasy/
 │   │   ├── App.test.js                   # App tests
 │   │   ├── index.js                      # Entry point
 │   │   ├── index.css                     # Global styles
-│   │   ├── logo.svg                      # Logo file
 │   │   ├── reportWebVitals.js            # Performance reporting
 │   │   └── setupTests.js                 # Test setup
 │   ├── public/                           # Static assets
 │   │   ├── index.html                    # HTML entry point
 │   │   ├── manifest.json                 # PWA manifest
-│   │   └── robots.txt                    # SEO robots file
+│   │   ├── robots.txt                    # SEO robots file
+│   │   ├── playercard.png                # Empty player card template
+│   │   ├── futmind_pitch.webp            # Football pitch background
+│   │   ├── positions/                    # Position icons
+│   │   └── teams/                        # Team logos
 │   └── package.json
 │
 ├── venv311/                              # Python virtual environment
@@ -91,12 +95,13 @@ LaLiga-Fantasy/
 - **Match Filtering** - Filter matches by team and date range with navigation to player stats
 - **Team Directory** - Browse all La Liga teams with logos and details
 - **Player Positions** - View players organized by position with images
-- **Sidebar Navigation** - Vertical left sidebar with icon-based menu (Home, Teams, Match Stats, Positions, Trophy, Live Stats, Search)
+- **Sidebar Navigation** - Vertical left sidebar with icon-based menu (Home, Teams, Match Stats, Positions, Trophy, Dream Team, Live Stats, Search)
 - **Responsive Design** - Mobile-friendly layout with responsive navigation
-- **Dream Team Management** - Create and manage custom team selections
+- **Dream Team Builder** - Formation-based team builder with 5 tactical formations (4-2-1-3, 4-3-3, 4-4-2, 3-5-2, 3-4-3)
 - **Auto-refresh** - Live stats update every 30 seconds
 
 ### 🎯 In Development
+- **Dream Team Player Selection** - Add players from database to formation slots
 - **TeamData Integration** - View player statistics by team and position
 - **User Authentication** - User profiles and authentication
 - **Player Search** - Advanced player search and filtering
@@ -268,8 +273,16 @@ App runs on `http://localhost:3000`
 - Vertical 100px-wide sidebar
 - Icon-based navigation with FontAwesome icons
 - Mobile-responsive hamburger menu
-- Routes: Home, Teams, Match Stats, Position, Trophy, Live Stats, Search
+- Routes: Home, Teams, Match Stats, Position, Trophy, Dream Team, Live Stats, Search
 - Smooth transitions and hover effects
+
+### DreamTeam Builder
+- Formation selector with 5 tactical formations
+- Visual football pitch with position-based player card slots
+- Empty player cards with LaLiga branding
+- Realistic pitch background with field markings
+- Position labels for each slot (GK, CB, LB, RB, CDM, CAM, CM, LM, RM, ST, LW, RW)
+- Two-column layout: pitch builder (left) and player pool (right)
 
 ## Database Schema
 
