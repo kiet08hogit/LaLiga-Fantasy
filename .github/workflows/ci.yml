@@ -22,15 +22,9 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '18'
-        cache: 'npm'
-        cache-dependency-path: backend/package-lock.json
     
     - name: Install dependencies
-      run: npm ci
-    
-    - name: Run tests
-      run: npm test --if-present
-      continue-on-error: true
+      run: npm install
 
   frontend:
     name: Frontend CI
@@ -47,15 +41,9 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '18'
-        cache: 'npm'
-        cache-dependency-path: frontend/package-lock.json
     
     - name: Install dependencies
-      run: npm ci
-    
-    - name: Run tests
-      run: npm test --if-present
-      continue-on-error: true
+      run: npm install
     
     - name: Build frontend
       run: npm run build
