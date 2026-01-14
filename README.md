@@ -1,45 +1,51 @@
 # La Liga Fantasy
 
-A fantasy football application for La Liga (Spanish top football division) with interactive 3D visualization, live match statistics, and player data management. Built with Node.js backend, React frontend, and PostgreSQL database.
+A fantasy football application for La Liga (Spanish top football division) with interactive 3D visualization, live match statistics, and player data management. Built with TypeScript backend, React frontend, and PostgreSQL database.
 
 ## Tech Stack
 
-- **Backend**: Node.js + Express.js
+- **Backend**: Node.js + Express.js + **TypeScript**
 - **Frontend**: React + Three.js (3D animations)
 - **Styling**: SCSS with responsive design
 - **Database**: PostgreSQL
 - **External APIs**: RapidAPI Football API
 - **Icons**: FontAwesome
 - **Data Processing**: Python
+- **Development Tools**: tsx, nodemon, TypeScript compiler
 
 ## Project Structure
 
 ```
 LaLiga-Fantasy/
-├── backend/                    # Node.js API server
+├── backend/                    # TypeScript Node.js API server
 │   ├── src/
 │   │   ├── controllers/
-│   │   │   ├── dreamteamController.js    # Dream team operations
-│   │   │   ├── playerController.js       # Player data
-│   │   │   ├── matchstatsController.js   # Match statistics
-│   │   │   └── liveStatsController.js    # Live match stats (RapidAPI)
+│   │   │   ├── dreamteamController.ts    # Dream team operations
+│   │   │   ├── playerController.ts       # Player data
+│   │   │   ├── matchstatsController.ts   # Match statistics
+│   │   │   └── liveStatsController.ts    # Live match stats (RapidAPI)
 │   │   ├── routes/
-│   │   │   ├── dreamteamRoutes.js
-│   │   │   ├── playerRoutes.js
-│   │   │   ├── matchRoutes.js
-│   │   │   └── liveStatsRoutes.js        # Live stats endpoints
+│   │   │   ├── dreamteamRoutes.ts
+│   │   │   ├── playerRoutes.ts
+│   │   │   ├── matchRoutes.ts
+│   │   │   └── liveStatsRoutes.ts        # Live stats endpoints
 │   │   ├── db/
-│   │   │   ├── pool.js                   # PostgreSQL connection pool
-│   │   │   ├── schema.js                 # Database schema
-│   │   │   ├── dreamteam.js
-│   │   │   ├── matchstats.js
-│   │   │   └── players.js
+│   │   │   ├── pool.ts                   # PostgreSQL connection pool
+│   │   │   ├── schema.ts                 # Database schema
+│   │   │   ├── dreamteam.ts
+│   │   │   ├── matchstats.ts
+│   │   │   └── players.ts
+│   │   ├── types/
+│   │   │   └── index.ts                  # TypeScript type definitions
 │   │   ├── middleware/                   # CORS and auth middleware
-│   │   └── index.js                      # Server entry point
+│   │   └── index.ts                      # Server entry point
+│   ├── dist/                             # Compiled JavaScript output
 │   ├── teamdata/
 │   │   ├── main.py                       # Data processing script
 │   │   └── laliga_dataset/               # CSV data files
 │   ├── .env                              # Environment variables
+│   ├── tsconfig.json                     # TypeScript configuration
+│   ├── initDb.ts                         # Database initialization script
 │   └── package.json
 │
 ├── frontend/                   # React application
@@ -90,6 +96,7 @@ LaLiga-Fantasy/
 ## Features
 
 ### ✨ Current Features
+- **TypeScript Backend** - Fully typed Node.js/Express API with strict type safety
 - **Interactive 3D ParticleBall** - Golden confetti animation with mouse repulsion effect on homepage
 - **Live Match Statistics** - Real-time La Liga matches via RapidAPI Football API
 - **Match Filtering** - Filter matches by team and date range with navigation to player stats
@@ -99,6 +106,7 @@ LaLiga-Fantasy/
 - **Responsive Design** - Mobile-friendly layout with responsive navigation
 - **Dream Team Builder** - Formation-based team builder with 5 tactical formations (4-2-1-3, 4-3-3, 4-4-2, 3-5-2, 3-4-3)
 - **Auto-refresh** - Live stats update every 30 seconds
+- **Type-Safe Database Operations** - Fully typed PostgreSQL queries with proper error handling
 
 ### 🎯 In Development
 - **Dream Team Player Selection** - Add players from database to formation slots
@@ -138,12 +146,24 @@ LaLiga-Fantasy/
    RAPIDAPI_KEY=your_rapidapi_key
    ```
 
-4. Start the development server:
+4. Initialize the database (optional - runs automatically on server start):
+   ```bash
+   npm run init-db
+   ```
+
+5. Start the development server:
    ```bash
    npm run dev
    ```
    Server runs on `http://localhost:5000`
-   Database tables are created automatically on first run
+   
+   TypeScript is compiled on-the-fly using `tsx` for development.
+
+6. Build for production (optional):
+   ```bash
+   npm run build
+   ```
+   Compiled JavaScript will be in the `dist/` folder.
 
 ### Frontend Setup
 
@@ -238,7 +258,7 @@ RAPIDAPI_KEY=your_key         # RapidAPI Football API key
 cd backend
 npm run dev
 ```
-Server runs on `http://localhost:5000`
+Server runs on `http://localhost:5000` with hot reload via nodemon + tsx
 
 **Terminal 2 - Frontend:**
 ```bash
@@ -246,6 +266,21 @@ cd frontend
 npm start
 ```
 App runs on `http://localhost:3000`
+
+### Production Build
+
+**Backend:**
+```bash
+cd backend
+npm run build      # Compile TypeScript to JavaScript
+npm start          # Run compiled code from dist/
+```
+
+**Frontend:**
+```bash
+cd frontend
+npm run build      # Create optimized production build
+```
 
 ## Key Components
 
@@ -287,11 +322,13 @@ App runs on `http://localhost:3000`
 ## Database Schema
 
 ### Key Tables
-- **players** - Player information and statistics
-- **dream_teams** - User's custom team selections
-- **dream_team_players** - Players in each dream team
-- **match_stats** - Match results and statistics
+- **players** - Player information and statistics (typed interface)
+- **dream_teams** - User's custom team selections (typed interface)
+- **dream_team_players** - Players in each dream team (typed interface)
+- **match_stats** - Match results and statistics (typed interface)
 - **teams** - La Liga team data
+
+All database operations use TypeScript interfaces for type safety and better IDE support.
 
 ## Contributing
 
@@ -320,11 +357,14 @@ App runs on `http://localhost:3000`
 ## Development Notes
 
 - **Port Configuration**: Frontend (3000), Backend (5000)
+- **TypeScript**: Backend uses TypeScript 5.7+ with strict mode enabled
+- **Hot Reload**: Development server uses tsx + nodemon for instant TypeScript recompilation
 - **RapidAPI**: Requires valid Football API key for live stats
 - **Three.js**: Used for 3D particle animations with auto-refresh every 30 seconds
 - **CORS**: Enabled for frontend-backend communication
 - **Database**: Auto-initializes tables on first connection
 - **Particle Physics**: Damping (0.92), Spring Force (0.08), Repulsion Radius (2.5)
+- **Type Safety**: All API endpoints have typed Request/Response handlers
 
 ## Troubleshooting
 
@@ -332,6 +372,13 @@ App runs on `http://localhost:3000`
 - Check PostgreSQL is running
 - Verify `.env` credentials are correct
 - Ensure port 5000 is not in use
+- Run `npm install` to ensure all TypeScript dependencies are installed
+
+### TypeScript compilation errors
+- Delete `node_modules` and run `npm install` again
+- Check `tsconfig.json` configuration
+- Ensure all `@types` packages are installed
+- Run `npm run build` to see detailed compilation errors
 
 ### Frontend can't connect to backend
 - Verify backend is running on port 5000
