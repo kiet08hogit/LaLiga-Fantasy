@@ -1,7 +1,18 @@
 import pool from './pool.js';
+import {
+  DreamTeam,
+  DreamTeamPlayer,
+  TeamStats,
+  TeamComposition,
+  UpdateDreamTeamData,
+  UpdatePlayerData,
+} from '../types/index.js';
 
-
-export async function createDreamTeam(userId, teamName, formation = '4-3-3') {
+export async function createDreamTeam(
+  userId: number,
+  teamName: string,
+  formation: string = '4-3-3'
+): Promise<DreamTeam> {
   const query = `
     INSERT INTO dream_teams (user_id, team_name, formation)
     VALUES ($1, $2, $3)
@@ -11,7 +22,7 @@ export async function createDreamTeam(userId, teamName, formation = '4-3-3') {
   return result.rows[0];
 }
 
-export async function getUserDreamTeams(userId) {
+export async function getUserDreamTeams(userId: number): Promise<DreamTeam[]> {
   const query = `
     SELECT * FROM dream_teams
     WHERE user_id = $1
@@ -21,7 +32,7 @@ export async function getUserDreamTeams(userId) {
   return result.rows;
 }
 
-export async function getDreamTeamById(teamId) {
+export async function getDreamTeamById(teamId: number): Promise<DreamTeam | undefined> {
   const query = `
     SELECT * FROM dream_teams
     WHERE id = $1;
@@ -30,7 +41,10 @@ export async function getDreamTeamById(teamId) {
   return result.rows[0];
 }
 
-export async function getDreamTeamByUserName(userId, teamName) {
+export async function getDreamTeamByUserName(
+  userId: number,
+  teamName: string
+): Promise<DreamTeam | undefined> {
   const query = `
     SELECT * FROM dream_teams
     WHERE user_id = $1 AND team_name = $2;
@@ -39,9 +53,13 @@ export async function getDreamTeamByUserName(userId, teamName) {
   return result.rows[0];
 }
 
-export async function updateDreamTeam(teamId, { teamName, formation, captainId, viceCaptainId }) {
-  const updates = [];
-  const values = [];
+export async function updateDreamTeam(
+  teamId: number,
+  data: UpdateDreamTeamData
+): Promise<DreamTeam | undefined> {
+  const { teamName, formation, captainId, viceCaptainId } = data;
+  const updates: string[] = [];
+  const values: any[] = [];
   let paramCount = 1;
 
   if (teamName !== undefined) {
@@ -79,7 +97,7 @@ export async function updateDreamTeam(teamId, { teamName, formation, captainId, 
   return result.rows[0];
 }
 
-export async function deleteDreamTeam(teamId) {
+export async function deleteDreamTeam(teamId: number): Promise<DreamTeam | undefined> {
   const query = `
     DELETE FROM dream_teams
     WHERE id = $1
@@ -89,7 +107,12 @@ export async function deleteDreamTeam(teamId) {
   return result.rows[0];
 }
 
-export async function addPlayerToTeam(dreamTeamId, playerId, position, squadOrder = null) {
+export async function addPlayerToTeam(
+  dreamTeamId: number,
+  playerId: number,
+  position: string,
+  squadOrder: number | null = null
+): Promise<DreamTeamPlayer> {
   const query = `
     INSERT INTO dream_team_players (dream_team_id, player_id, position, squad_order)
     VALUES ($1, $2, $3, $4)
@@ -99,7 +122,7 @@ export async function addPlayerToTeam(dreamTeamId, playerId, position, squadOrde
   return result.rows[0];
 }
 
-export async function getTeamPlayers(dreamTeamId) {
+export async function getTeamPlayers(dreamTeamId: number): Promise<DreamTeamPlayer[]> {
   const query = `
     SELECT 
       dtp.*,
@@ -120,7 +143,10 @@ export async function getTeamPlayers(dreamTeamId) {
   return result.rows;
 }
 
-export async function removePlayerFromTeam(dreamTeamId, playerId) {
+export async function removePlayerFromTeam(
+  dreamTeamId: number,
+  playerId: number
+): Promise<DreamTeamPlayer | undefined> {
   const query = `
     DELETE FROM dream_team_players
     WHERE dream_team_id = $1 AND player_id = $2
@@ -130,9 +156,14 @@ export async function removePlayerFromTeam(dreamTeamId, playerId) {
   return result.rows[0];
 }
 
-export async function updatePlayerInTeam(dreamTeamId, playerId, { position, squadOrder }) {
-  const updates = [];
-  const values = [];
+export async function updatePlayerInTeam(
+  dreamTeamId: number,
+  playerId: number,
+  data: UpdatePlayerData
+): Promise<DreamTeamPlayer | undefined> {
+  const { position, squadOrder } = data;
+  const updates: string[] = [];
+  const values: any[] = [];
   let paramCount = 1;
 
   if (position !== undefined) {
@@ -145,7 +176,7 @@ export async function updatePlayerInTeam(dreamTeamId, playerId, { position, squa
   }
 
   if (updates.length === 0) {
-    return null;
+    return undefined;
   }
 
   updates.push(`updated_at = CURRENT_TIMESTAMP`);
@@ -163,7 +194,7 @@ export async function updatePlayerInTeam(dreamTeamId, playerId, { position, squa
   return result.rows[0];
 }
 
-export async function getTeamTotalPoints(dreamTeamId) {
+export async function getTeamTotalPoints(dreamTeamId: number): Promise<TeamStats> {
   const query = `
     SELECT 
       SUM(p.points) AS total_points,
@@ -177,7 +208,7 @@ export async function getTeamTotalPoints(dreamTeamId) {
   return result.rows[0];
 }
 
-export async function updateTeamTotalPoints(dreamTeamId) {
+export async function updateTeamTotalPoints(dreamTeamId: number): Promise<DreamTeam> {
   const query = `
     UPDATE dream_teams
     SET total_points = (
@@ -194,7 +225,7 @@ export async function updateTeamTotalPoints(dreamTeamId) {
   return result.rows[0];
 }
 
-export async function getTeamComposition(dreamTeamId) {
+export async function getTeamComposition(dreamTeamId: number): Promise<TeamComposition[]> {
   const query = `
     SELECT 
       position,

@@ -1,10 +1,11 @@
-import axios from 'axios';
+import { Request, Response } from 'express';
+import axios, { AxiosInstance } from 'axios';
 
 const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY;
 const RAPIDAPI_HOST = 'api-football-v1.p.rapidapi.com';
 const LA_LIGA_ID = 140; // La Liga league ID in API-Football
 
-const axiosInstance = axios.create({
+const axiosInstance: AxiosInstance = axios.create({
     baseURL: `https://${RAPIDAPI_HOST}`,
     headers: {
         'X-RapidAPI-Key': RAPIDAPI_KEY,
@@ -13,7 +14,7 @@ const axiosInstance = axios.create({
 });
 
 // Get live matches
-export const getLiveMatches = async (req, res) => {
+export const getLiveMatches = async (req: Request, res: Response): Promise<void> => {
     try {
         const response = await axiosInstance.get('/fixtures', {
             params: {
@@ -25,13 +26,14 @@ export const getLiveMatches = async (req, res) => {
 
         res.json(response.data);
     } catch (error) {
-        console.error('Error fetching live matches:', error.message);
+        const err = error as Error;
+        console.error('Error fetching live matches:', err.message);
         res.status(500).json({ error: 'Failed to fetch live matches' });
     }
 };
 
 // Get league standings
-export const getStandings = async (req, res) => {
+export const getStandings = async (req: Request, res: Response): Promise<void> => {
     try {
         const response = await axiosInstance.get('/standings', {
             params: {
@@ -42,17 +44,18 @@ export const getStandings = async (req, res) => {
 
         res.json(response.data);
     } catch (error) {
-        console.error('Error fetching standings:', error.message);
+        const err = error as Error;
+        console.error('Error fetching standings:', err.message);
         res.status(500).json({ error: 'Failed to fetch standings' });
     }
 };
 
 // Get fixtures for a specific matchweek
-export const getFixtures = async (req, res) => {
+export const getFixtures = async (req: Request, res: Response): Promise<void> => {
     try {
         const { round } = req.query;
         
-        const params = {
+        const params: any = {
             league: LA_LIGA_ID,
             season: 2024
         };
@@ -64,7 +67,8 @@ export const getFixtures = async (req, res) => {
         const response = await axiosInstance.get('/fixtures', { params });
         res.json(response.data);
     } catch (error) {
-        console.error('Error fetching fixtures:', error.message);
+        const err = error as Error;
+        console.error('Error fetching fixtures:', err.message);
         res.status(500).json({ error: 'Failed to fetch fixtures' });
     }
 };
