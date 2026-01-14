@@ -1,6 +1,6 @@
 import pool from './pool.js';
 
-export async function initializeDatabase() {
+export async function initializeDatabase(): Promise<boolean> {
   try {
     // Create dream_teams table
     await pool.query(`
@@ -46,12 +46,13 @@ export async function initializeDatabase() {
 
     return true;
   } catch (err) {
-    console.error('✗ Error creating dream team tables:', err.message);
+    const error = err as Error;
+    console.error('✗ Error creating dream team tables:', error.message);
     return false;
   }
 }
 
-export async function dropDreamTeamTables() {
+export async function dropDreamTeamTables(): Promise<boolean> {
   const dropQuery = `
     DROP TABLE IF EXISTS dream_team_players CASCADE;
     DROP TABLE IF EXISTS dream_teams CASCADE;
@@ -61,7 +62,8 @@ export async function dropDreamTeamTables() {
     console.log('✓ Dream team tables dropped successfully');
     return true;
   } catch (err) {
-    console.error('✗ Error dropping tables:', err.message);
+    const error = err as Error;
+    console.error('✗ Error dropping tables:', error.message);
     return false;
   }
 }

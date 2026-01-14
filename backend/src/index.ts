@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
 import pool from './db/pool.js';
 import { initializeDatabase } from './db/schema.js';
@@ -25,7 +25,7 @@ initializeDatabase()
     console.error('Database initialization error:', err);
   });
 
-app.get('/', (req, res) => {
+app.get('/', (req: Request, res: Response) => {
   res.json('Welcome to the Players API');
 });
 
