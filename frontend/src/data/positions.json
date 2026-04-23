@@ -1,23 +1,23 @@
 {
     "positions": [
         {
-            "cover": "/positions/janoblak.png", 
-            "title": "Goalie", 
+            "cover": "/positions/janoblak.png",
+            "title": "Goalie",
             "search": "GK"
-        }, 
+        },
         {
-            "cover": "/positions/antoniedefend.webp", 
-            "title": "Defender", 
+            "cover": "/positions/ramos-messi.jpg",
+            "title": "Defender",
             "search": "DF"
         },
         {
-            "cover": "/positions/bellinghammid.png", 
-            "title": "Midfielder", 
+            "cover": "/positions/bellinghammid.png",
+            "title": "Midfielder",
             "search": "MF"
         },
         {
-            "cover": "/positions/mbappe vs yamal.webp", 
-            "title": "Forwards", 
+            "cover": "/positions/Ronaldo-siu.png",
+            "title": "Forwards",
             "search": "FW"
         }
     ]

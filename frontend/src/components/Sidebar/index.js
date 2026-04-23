@@ -24,9 +24,6 @@ const Sidebar = () => {
                 <NavLink exact="true" activeclassname = "active" className = "teams-link" to="/teams">
                     <FontAwesomeIcon icon = {faUsers} onClick={() => setShowNav(false)}/>
                 </NavLink>
-                <NavLink exact="true" activeclassname = "active" className = "matchstats-link" to="/matchstats">
-                    <FontAwesomeIcon icon = {faChartBar} onClick={() => setShowNav(false)} />
-                </NavLink>
                 <NavLink exact="true" activeclassname = "active" className = "position-link" to="/position">
                     <FontAwesomeIcon icon = {faTshirt}  onClick={() => setShowNav(false)}/>
                 </NavLink>

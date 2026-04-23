@@ -5,7 +5,6 @@ Consolidates all data scraping, processing, and analysis functions
 
 import os
 import pandas as pd
-import numpy as np
 
 # Set data folder path
 DATA_FOLDER = os.path.join(os.path.dirname(__file__), 'laliga_dataset')
@@ -14,9 +13,7 @@ DATA_FOLDER = os.path.join(os.path.dirname(__file__), 'laliga_dataset')
 os.makedirs(DATA_FOLDER, exist_ok=True)
 
 
-# ============================================================================
 # DATA PROCESSING FUNCTIONS
-# ============================================================================
 
 def fix_date_format(input_file="LaLigaMatch_24-25.csv", output_file="LaLigaMatch_24-25_fixed.csv"):
     """Convert date format from DD/MM/YY to MM/DD/YYYY"""
@@ -34,7 +31,7 @@ def fix_date_format(input_file="LaLigaMatch_24-25.csv", output_file="LaLigaMatch
     df["Date"] = df["Date"].dt.strftime("%m/%d/%Y")
     
     df.to_csv(output_path, index=False)
-    print(f"✓ Fixed dates saved to: {output_file}")
+    print(f" Fixed dates saved to: {output_file}")
 
 
 def aggregate_player_stats(input_file="playerstats24-25.csv", output_file="playerstats24-25_season_totals.csv"):
@@ -212,9 +209,7 @@ def view_season_totals(csv_file="playerstats24-25_season_totals.csv"):
     print(top_assists.to_string())
 
 
-# ============================================================================
 # MAIN MENU
-# ============================================================================
 
 def show_menu():
     """Display interactive menu"""
