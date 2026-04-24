@@ -13,9 +13,9 @@ const Positions = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setLetterClass("text-animate-hover");
-        }, 3000); 
+        }, 3000);
 
-        return () => { 
+        return () => {
             clearTimeout(timer);
         }
     }, []);
@@ -31,32 +31,31 @@ const Positions = () => {
         setSearchQuery(event.target.value);
     };
 
-    const renderPosition = (positions) => { 
+    const renderPosition = (positions) => {
         return (
-          <div className="images-container">
-            {positions.map((position, idx) => (
-              <div key={idx} className="image-box">
-                <img src={position.cover} alt="positions" className="teams-image" />
-                <div className="content">
-                  <p className="title">{position.title}</p>
-                  <Link className="btn" to={`/data?position=${encodeURIComponent(position.search)}`}>
-                    View
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
+            <div className="images-container">
+                {positions.map((position, idx) => (
+                    <div key={idx} className="image-box">
+                        <img src={position.cover} alt="positions" className="teams-image" />
+                        <div className="content">
+                            <p className="title">{position.title}</p>
+                            <Link className="btn" to={`/data?position=${encodeURIComponent(position.search)}`}>
+                                View
+                            </Link>
+                        </div>
+                    </div>
+                ))}
+            </div>
         )
     };
 
     return (
         <>
-            <div className="container teams-page">
+            <div className="container teams-page position-page" >
                 <h1 className="page-title">
-                    <br/>
-                    <AnimatedLetters letterClass={letterClass} strArray={"Positions".split("")} idx={15}/>
+                    <AnimatedLetters letterClass={letterClass} strArray={"Positions".split("")} idx={15} />
                 </h1>
-                <div className="search-bar">
+                <div className="search-bar-teams" style={{ marginLeft: '47px' }}>
                     <input
                         type="text"
                         placeholder="Search for positions"
@@ -66,7 +65,7 @@ const Positions = () => {
                 </div>
                 <div>{renderPosition(filteredPositions)}</div>
             </div>
-            <Loader type="pacman"/>
+            <Loader type="pacman" />
         </>
     );
 }

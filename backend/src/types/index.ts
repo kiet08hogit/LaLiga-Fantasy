@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 
-// Player types
 export interface Player {
   id: number;
   player_name: string;
   nation: string;
   position: string;
-  age: number;
+  /** Season-style strings (e.g. years-days) or a numeric age from imports */
+  age: number | string;
   matches_played: number;
   starts: number;
   minutes_played: number;
@@ -23,7 +23,6 @@ export interface Player {
   image_url?: string;
 }
 
-// Match types
 export interface Match {
   id: number;
   match_date: string;
@@ -39,7 +38,6 @@ export interface Match {
   referee?: string;
 }
 
-// Dream Team types
 export interface DreamTeam {
   id: number;
   user_id: number;
@@ -65,7 +63,7 @@ export interface DreamTeamPlayer {
   player_position?: string;
   team?: string;
   nation?: string;
-  age?: number;
+  age?: number | string;
   market_value?: number;
   points?: number;
   image_url?: string;

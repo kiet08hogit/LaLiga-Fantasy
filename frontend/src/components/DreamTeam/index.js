@@ -2,15 +2,34 @@ import React, { useState, useEffect } from 'react';
 import Loader from 'react-loaders';
 import AnimatedLetters from '../AnimatedLetters';
 import './index.scss';
+import axios from 'axios';
+import { API_BASE_URL } from '../../config';
+import PlayerCard from './PlayerCard';
 
 const DreamTeam = () => {
   const [letterClass, setLetterClass] = useState('text-animate');
   const [formation, setFormation] = useState('4-2-1-3');
+  const [allPlayers, setAllPlayers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setLetterClass('text-animate-hover');
     }, 3000);
+
+    const fetchPlayers = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/players`);
+        setAllPlayers(response.data);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching players:", err);
+        setLoading(false);
+      }
+    };
+
+    fetchPlayers();
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -89,10 +108,10 @@ const DreamTeam = () => {
     <>
       <div className="container dreamteam-page">
         <h1 className="page-title">
-          <AnimatedLetters 
-            letterClass={letterClass} 
-            strArray={'Dream Team Builder'.split('')} 
-            idx={15} 
+          <AnimatedLetters
+            letterClass={letterClass}
+            strArray={'Dream Team Builder'.split('')}
+            idx={15}
           />
         </h1>
 
@@ -103,8 +122,8 @@ const DreamTeam = () => {
               <h2>Dreamteam Builder</h2>
               <div className="formation-selector">
                 <label>Formation</label>
-                <select 
-                  value={formation} 
+                <select
+                  value={formation}
                   onChange={(e) => setFormation(e.target.value)}
                   className="formation-dropdown"
                 >
@@ -118,7 +137,7 @@ const DreamTeam = () => {
             {/* Football Pitch */}
             <div className="football-pitch">
               <div className="formation-display">{formation}</div>
-              
+
               {/* Player slots based on formation */}
               {formationLayouts[formation].map((slot, index) => (
                 <div
@@ -151,11 +170,28 @@ const DreamTeam = () => {
             <div className="players-header">
               <h2>Available Players - LaLiga</h2>
             </div>
-            
+
             <div className="players-grid">
-              <p style={{ color: '#999', textAlign: 'center', padding: '40px' }}>
-                Player selection coming soon...
-              </p>
+              {loading ? (
+                <p style={{ color: '#999', textAlign: 'center', padding: '40px' }}>Loading players...</p>
+              ) : allPlayers.length > 0 ? (
+                allPlayers.map((player) => (
+                  <PlayerCard
+                    key={player.id}
+                    player={{
+                      name: player.player_name,
+                      position: player.position,
+                      team: player.team,
+                      rating: 0 // Placeholder as API doesn't have rating yet
+                    }}
+                    showAdd={true}
+                  />
+                ))
+              ) : (
+                <p style={{ color: '#999', textAlign: 'center', padding: '40px' }}>
+                  No players found.
+                </p>
+              )}
             </div>
           </div>
         </div>

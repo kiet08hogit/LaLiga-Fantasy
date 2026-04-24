@@ -6,7 +6,7 @@ const RAPIDAPI_HOST = 'api-football-v1.p.rapidapi.com';
 const LA_LIGA_ID = 140; // La Liga league ID in API-Football
 
 const axiosInstance: AxiosInstance = axios.create({
-    baseURL: `https://${RAPIDAPI_HOST}`,
+    baseURL: `https://${RAPIDAPI_HOST}/v3`,
     headers: {
         'X-RapidAPI-Key': RAPIDAPI_KEY,
         'X-RapidAPI-Host': RAPIDAPI_HOST

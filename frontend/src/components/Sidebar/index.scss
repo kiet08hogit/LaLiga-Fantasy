@@ -102,11 +102,13 @@
                 content: "POSITION"; 
             }
         }
-        a.matchstats-link { 
+ 
+        a.livestats-link { 
             &:after { 
-                content: "MATCH STATS"; 
+                content: "LIVE STATS"; 
             }
         }
+      
 
         a.trophy-link { 
             &:after { 
