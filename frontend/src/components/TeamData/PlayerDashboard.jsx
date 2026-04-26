@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { CartesianGrid, Bar, BarChart, XAxis, YAxis, Tooltip, Legend } from "recharts";
+import React, { useMemo, useState } from 'react';
+import { CartesianGrid, Area, AreaChart, XAxis, YAxis } from "recharts";
 import {
   Card,
   CardContent,
@@ -11,25 +11,36 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
 } from "@/components/ui/chart";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { PlayerDataTable } from './PlayerDataTable';
 
 const chartConfig = {
   goals: {
     label: "Goals",
-    color: "#4cc9f0", 
+    color: "#C4A747",
   },
   assists: {
     label: "Assists",
-    color: "#c77dff", 
+    color: "#4cc9f0",
   },
 };
 
 export function PlayerDashboard({ data }) {
+  const [topN, setTopN] = useState("10");
+
   const stats = useMemo(() => {
     let totalGoals = 0;
     let totalXG = 0;
-    
+
     let topScorer = { name: "N/A", goals: -1 };
     let topPlaymaker = { name: "N/A", assists: -1 };
 
@@ -45,13 +56,14 @@ export function PlayerDashboard({ data }) {
       if (goals > topScorer.goals) {
         topScorer = { name: player.player_name, goals };
       }
-      
+
       if (assists > topPlaymaker.assists) {
         topPlaymaker = { name: player.player_name, assists };
       }
     });
 
-    // Process chart data: Top 10 by G+A
+    // Process chart data: Top N by G+A
+    const limit = Number(topN);
     const chartData = [...data]
       .map(player => ({
         name: player.player_name,
@@ -61,7 +73,7 @@ export function PlayerDashboard({ data }) {
       }))
       .filter(p => p.totalContributions > 0)
       .sort((a, b) => b.totalContributions - a.totalContributions)
-      .slice(0, 10);
+      .slice(0, limit);
 
     return {
       totalGoals,
@@ -70,7 +82,7 @@ export function PlayerDashboard({ data }) {
       topPlaymaker,
       chartData
     };
-  }, [data]);
+  }, [data, topN]);
 
   return (
     <div className="flex flex-col gap-6 w-full mt-4">
@@ -120,52 +132,104 @@ export function PlayerDashboard({ data }) {
         </Card>
       </div>
 
-      {/* Chart Section */}
-      <Card className="bg-white/5 border-white/10 text-white shadow-none">
-        <CardHeader>
-          <CardTitle>Top 10 Performers</CardTitle>
-          <CardDescription className="text-white/50" >Ranked by Goals + Assists</CardDescription>
+      {/* Chart Section — Interactive Area Chart */}
+      <Card className="bg-white/5 border-white/10 text-white shadow-none pt-0">
+        <CardHeader className="flex items-center gap-2 space-y-0 border-b border-white/10 py-5 sm:flex-row">
+          <div className="grid flex-1 gap-1">
+            <CardTitle className="text-xl">Top Performers</CardTitle>
+            <CardDescription className="text-white/50">
+              Goals + Assists contribution by player
+            </CardDescription>
+          </div>
+          <Select value={topN} onValueChange={setTopN}>
+            <SelectTrigger
+              className="hidden w-[160px] rounded-lg sm:ml-auto sm:flex bg-white/5 border-white/10 text-white"
+              aria-label="Select top N"
+            >
+              <SelectValue placeholder="Top 10" />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl bg-[#0a1628] border-white/10 text-white">
+              <SelectItem value="5" className="rounded-lg text-white focus:bg-white/10 focus:text-white">
+                Top 5
+              </SelectItem>
+              <SelectItem value="10" className="rounded-lg text-white focus:bg-white/10 focus:text-white">
+                Top 10
+              </SelectItem>
+              <SelectItem value="15" className="rounded-lg text-white focus:bg-white/10 focus:text-white">
+                Top 15
+              </SelectItem>
+              <SelectItem value="20" className="rounded-lg text-white focus:bg-white/10 focus:text-white">
+                Top 20
+              </SelectItem>
+            </SelectContent>
+          </Select>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
           {stats.chartData.length > 0 ? (
-            <ChartContainer config={chartConfig} className="h-[300px] w-full">
-              <BarChart
+            <ChartContainer config={chartConfig} className="aspect-auto h-[350px] w-full [&_.recharts-cartesian-axis-tick_text]:fill-white">
+              <AreaChart
                 accessibilityLayer
                 data={stats.chartData}
-                margin={{
-                  left: -20,
-                  right: 12,
-                  top: 20,
-                  bottom: 80
-                }}
+                margin={{ left: 40, right: 12, top: 20, bottom: 0 }}
               >
-                <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.1)" />
+                <defs>
+                  <linearGradient id="fillGoalsPlayer" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="var(--color-goals)" stopOpacity={0.7} />
+                    <stop offset="95%" stopColor="var(--color-goals)" stopOpacity={0.05} />
+                  </linearGradient>
+                  <linearGradient id="fillAssistsPlayer" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="var(--color-assists)" stopOpacity={0.7} />
+                    <stop offset="95%" stopColor="var(--color-assists)" stopOpacity={0.05} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.06)" />
                 <XAxis
                   dataKey="name"
                   tickLine={false}
                   axisLine={false}
                   tickMargin={8}
-                  tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 11 }}
-                  angle={-45}
+                  tick={{ fill: '#ffffff', fontSize: 13, fontWeight: 600 }}
+                  angle={-40}
                   textAnchor="end"
+                  height={100}
                 />
                 <YAxis
-                    tickLine={false}
-                    axisLine={false}
-                    tickMargin={8}
-                    tick={{ fill: 'rgba(255,255,255,0.5)' }}
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                  tick={{ fill: 'rgba(255,255,255,0.4)' }}
                 />
                 <ChartTooltip
-                  cursor={{ fill: 'rgba(255,255,255,0.1)' }}
-                  content={<ChartTooltipContent />}
+                  cursor={{ stroke: 'rgba(255,255,255,0.15)' }}
+                  content={
+                    <ChartTooltipContent
+                      labelFormatter={(value) => value}
+                      indicator="dot"
+                    />
+                  }
                 />
-                <Bar dataKey="goals" stackId="a" fill="var(--color-goals)" radius={[0, 0, 4, 4]} />
-                <Bar dataKey="assists" stackId="a" fill="var(--color-assists)" radius={[4, 4, 0, 0]} />
-              </BarChart>
+                <Area
+                  dataKey="assists"
+                  type="natural"
+                  fill="url(#fillAssistsPlayer)"
+                  stroke="var(--color-assists)"
+                  strokeWidth={2}
+                  stackId="a"
+                />
+                <Area
+                  dataKey="goals"
+                  type="natural"
+                  fill="url(#fillGoalsPlayer)"
+                  stroke="var(--color-goals)"
+                  strokeWidth={2}
+                  stackId="a"
+                />
+                <ChartLegend verticalAlign="bottom" content={<ChartLegendContent className="text-[15px] font-semibold text-white mt-4" />} />
+              </AreaChart>
             </ChartContainer>
           ) : (
-            <div className="flex h-[300px] items-center justify-center text-white/50">
-              No attacking data available down this filter path.
+            <div className="flex h-[350px] items-center justify-center text-white/50">
+              No attacking data available for this filter.
             </div>
           )}
         </CardContent>

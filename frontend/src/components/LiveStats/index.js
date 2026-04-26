@@ -2,28 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import './index.scss';
 import { API_BASE_URL } from '../../config';
-import teamsAsset from '../../data/teams.json';
-
-// Map DB team names → teams.json titles for logo lookup
-const TEAM_ALIAS = {
-  'Ath Bilbao': 'Athletic Bilbao',
-  'Ath Madrid': 'Atlético Madrid',
-  'Vallecano': 'Rayo Vallecano',
-  'Girona': 'Girona FC',
-  'Celta': 'Celta Vigo',
-  'Betis': 'Real Betis',
-  'Sociedad': 'Real Sociedad',
-  'Valladolid': 'Real Valladolid',
-  'Espanol': 'Espanyol',
-};
-
-function getTeamLogo(dbName) {
-  const resolved = TEAM_ALIAS[dbName] || dbName;
-  const team = teamsAsset.teams.find(
-    (t) => t.title.toLowerCase() === resolved.toLowerCase()
-  );
-  return team?.cover || null;
-}
 
 const LiveStats = () => {
   const [liveMatches, setLiveMatches] = useState([]);
@@ -31,26 +9,15 @@ const LiveStats = () => {
   const [liveLoading, setLiveLoading] = useState(true);
   const [recentLoading, setRecentLoading] = useState(true);
   const [liveError, setLiveError] = useState(null);
+  const [recentError, setRecentError] = useState(null);
 
-  // Fetch live matches from RapidAPI
+  // ── Fetch live matches ──
   useEffect(() => {
-    const fetchLiveMatches = async () => {
+    const fetchLive = async () => {
       try {
         setLiveLoading(true);
-        const response = await axios.get(`${API_BASE_URL}/live-stats/live`);
-        const formatted =
-          response.data.response?.map((match) => ({
-            id: match.fixture.id,
-            homeTeam: match.teams.home.name,
-            awayTeam: match.teams.away.name,
-            homeLogo: match.teams.home.logo,
-            awayLogo: match.teams.away.logo,
-            homeScore: match.goals.home,
-            awayScore: match.goals.away,
-            status: match.fixture.status.short,
-            minute: match.fixture.status.elapsed || 0,
-          })) || [];
-        setLiveMatches(formatted);
+        const res = await axios.get(`${API_BASE_URL}/live-stats/live`);
+        setLiveMatches(res.data.matches || []);
         setLiveError(null);
       } catch (err) {
         console.error('Error fetching live matches:', err);
@@ -61,24 +28,22 @@ const LiveStats = () => {
       }
     };
 
-    fetchLiveMatches();
-    const interval = setInterval(fetchLiveMatches, 30000);
+    fetchLive();
+    const interval = setInterval(fetchLive, 60000); // refresh every 60s
     return () => clearInterval(interval);
   }, []);
 
-  // Always fetch recent matches from your DB
+  // ── Fetch recent finished matches ──
   useEffect(() => {
     const fetchRecent = async () => {
       try {
         setRecentLoading(true);
-        const response = await axios.get(`${API_BASE_URL}/matches/`);
-        // Sort by date descending, take most recent 20
-        const sorted = response.data.sort(
-          (a, b) => new Date(b.match_date) - new Date(a.match_date)
-        );
-        setRecentMatches(sorted.slice(0, 20));
+        const res = await axios.get(`${API_BASE_URL}/live-stats/recent`);
+        setRecentMatches(res.data.matches || []);
+        setRecentError(null);
       } catch (err) {
         console.error('Error fetching recent matches:', err);
+        setRecentError(err.message);
       } finally {
         setRecentLoading(false);
       }
@@ -86,18 +51,13 @@ const LiveStats = () => {
     fetchRecent();
   }, []);
 
-  // Group recent matches by matchday (date)
-  const groupedByDate = useMemo(() => {
+  // ── Group recent matches by matchday ──
+  const groupedByMatchday = useMemo(() => {
     const groups = {};
     recentMatches.forEach((m) => {
-      const dateKey = new Date(m.match_date).toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      });
-      if (!groups[dateKey]) groups[dateKey] = [];
-      groups[dateKey].push(m);
+      const key = `Matchday ${m.matchday}`;
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(m);
     });
     return groups;
   }, [recentMatches]);
@@ -108,13 +68,11 @@ const LiveStats = () => {
     <div className="livestats-container fade-in">
       {/* ── Header ── */}
       <header className="livestats-header">
-        <div className="livestats-header-text">
-          <h1>Live Stats</h1>
-          <p>Real-time match scores & recent results</p>
-        </div>
+        <h1>Live Stats</h1>
+        <p>Real-time La Liga match scores & recent results</p>
       </header>
 
-      {/* ── Live Matches Section ── */}
+      {/* ── Live Matches ── */}
       <section className="livestats-section">
         <div className="section-label">
           <span className={`live-dot ${hasLive ? 'active' : ''}`} />
@@ -122,39 +80,11 @@ const LiveStats = () => {
         </div>
 
         {liveLoading ? (
-          <div className="status-message">Checking for live matches...</div>
-        ) : liveError ? (
-          <div className="status-message muted">
-            Unable to fetch live data — showing recent results below
-          </div>
+          <div className="status-message">Checking for live matches…</div>
         ) : hasLive ? (
           <div className="matches-grid">
             {liveMatches.map((match) => (
-              <div key={match.id} className="match-card live">
-                <div className="match-card-status">
-                  <span className="status-badge live-badge">LIVE</span>
-                  <span className="match-minute">{match.minute}'</span>
-                </div>
-                <div className="match-card-teams">
-                  <div className="match-team">
-                    {match.homeLogo && (
-                      <img src={match.homeLogo} alt="" className="team-logo-sm" />
-                    )}
-                    <span className="team-name">{match.homeTeam}</span>
-                  </div>
-                  <div className="match-score-display">
-                    <span>{match.homeScore}</span>
-                    <span className="score-sep">–</span>
-                    <span>{match.awayScore}</span>
-                  </div>
-                  <div className="match-team away">
-                    <span className="team-name">{match.awayTeam}</span>
-                    {match.awayLogo && (
-                      <img src={match.awayLogo} alt="" className="team-logo-sm" />
-                    )}
-                  </div>
-                </div>
-              </div>
+              <MatchCard key={match.id} match={match} isLive />
             ))}
           </div>
         ) : (
@@ -164,62 +94,29 @@ const LiveStats = () => {
         )}
       </section>
 
-      {/* ── Recent Matches Section ── */}
+      {/* ── Recent Results ── */}
       <section className="livestats-section recent-section">
         <div className="section-label">
           <h2>Recent Results</h2>
         </div>
 
         {recentLoading ? (
-          <div className="status-message">Loading recent matches...</div>
+          <div className="status-message">Loading recent matches…</div>
+        ) : recentError ? (
+          <div className="status-message muted">
+            Unable to load recent matches. Check your API key configuration.
+          </div>
         ) : recentMatches.length === 0 ? (
           <div className="status-message muted">No recent matches found.</div>
         ) : (
           <div className="recent-matchdays">
-            {Object.entries(groupedByDate).map(([dateLabel, matches]) => (
-              <div key={dateLabel} className="matchday-group">
-                <h3 className="matchday-label">{dateLabel}</h3>
+            {Object.entries(groupedByMatchday).map(([label, matches]) => (
+              <div key={label} className="matchday-group">
+                <h3 className="matchday-label">{label}</h3>
                 <div className="matchday-cards">
-                  {matches.map((match, idx) => {
-                    const homeLogo = getTeamLogo(match.home_team);
-                    const awayLogo = getTeamLogo(match.away_team);
-
-                    let resultClass = '';
-                    if (match.result === 'H') resultClass = 'result-home';
-                    else if (match.result === 'A') resultClass = 'result-away';
-                    else if (match.result === 'D') resultClass = 'result-draw';
-
-                    return (
-                      <div key={idx} className="match-card recent">
-                        <div className="match-card-status">
-                          <span className="status-badge ft-badge">FT</span>
-                        </div>
-                        <div className="match-card-teams">
-                          <div className="match-team">
-                            {homeLogo && (
-                              <img src={homeLogo} alt="" className="team-logo-sm" />
-                            )}
-                            <span className="team-name">{match.home_team}</span>
-                          </div>
-                          <div className={`match-score-display ${resultClass}`}>
-                            <span className="score-home">{match.home_goals}</span>
-                            <span className="score-sep">–</span>
-                            <span className="score-away">{match.away_goals}</span>
-                          </div>
-                          <div className="match-team away">
-                            <span className="team-name">{match.away_team}</span>
-                            {awayLogo && (
-                              <img src={awayLogo} alt="" className="team-logo-sm" />
-                            )}
-                          </div>
-                        </div>
-                        <div className="match-card-stats">
-                          <span>Shots: {match.home_shots ?? '—'} – {match.away_shots ?? '—'}</span>
-                          <span>Corners: {match.home_corners ?? '—'} – {match.away_corners ?? '—'}</span>
-                        </div>
-                      </div>
-                    );
-                  })}
+                  {matches.map((match) => (
+                    <MatchCard key={match.id} match={match} />
+                  ))}
                 </div>
               </div>
             ))}
@@ -229,5 +126,72 @@ const LiveStats = () => {
     </div>
   );
 };
+
+// ── Match Card component ──
+function MatchCard({ match, isLive = false }) {
+  const home = match.homeTeam || {};
+  const away = match.awayTeam || {};
+  const score = match.score || {};
+  const ft = score.fullTime || {};
+
+  // Determine status label
+  let statusLabel = 'FT';
+  let statusClass = 'ft-badge';
+  if (isLive || match.status === 'IN_PLAY' || match.status === 'PAUSED') {
+    statusLabel = match.status === 'PAUSED' ? 'HT' : 'LIVE';
+    statusClass = 'live-badge';
+  } else if (match.status === 'SCHEDULED' || match.status === 'TIMED') {
+    const d = new Date(match.utcDate);
+    statusLabel = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    statusClass = 'scheduled-badge';
+  }
+
+  // Match date
+  const matchDate = new Date(match.utcDate).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+  });
+
+  return (
+    <div className={`match-card ${isLive ? 'live' : 'recent'}`}>
+      <div className="match-card-status">
+        <span className={`status-badge ${statusClass}`}>{statusLabel}</span>
+        <span className="match-date">{matchDate}</span>
+        {isLive && match.minute && (
+          <span className="match-minute">{match.minute}'</span>
+        )}
+      </div>
+
+      <div className="match-card-teams">
+        <div className="match-team">
+          {home.crest && (
+            <img src={home.crest} alt="" className="team-logo-sm" />
+          )}
+          <span className="team-name">{home.shortName || home.name}</span>
+        </div>
+
+        <div className="match-score-display">
+          <span>{ft.home ?? '–'}</span>
+          <span className="score-sep">–</span>
+          <span>{ft.away ?? '–'}</span>
+        </div>
+
+        <div className="match-team away">
+          <span className="team-name">{away.shortName || away.name}</span>
+          {away.crest && (
+            <img src={away.crest} alt="" className="team-logo-sm" />
+          )}
+        </div>
+      </div>
+
+      {score.halfTime && (ft.home !== null) && (
+        <div className="match-card-stats">
+          <span>HT: {score.halfTime.home ?? '–'} – {score.halfTime.away ?? '–'}</span>
+          {match.venue && <span>{match.venue}</span>}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default LiveStats;

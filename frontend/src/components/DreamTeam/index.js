@@ -5,12 +5,33 @@ import './index.scss';
 import axios from 'axios';
 import { API_BASE_URL } from '../../config';
 import PlayerCard from './PlayerCard';
+import playerResourceIds from '../../data/playerResourceIds.json';
+
+const getCleanName = (name) => {
+  return name.toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]/g, "");
+};
+
+const CDN_BASE = 'https://card-image.futmind.com/en/26';
+
+const getPlayerImage = (playerName) => {
+  const cleanP = getCleanName(playerName);
+  const matchedKey = Object.keys(playerResourceIds).find(k => {
+    const cleanK = getCleanName(k);
+    return cleanK === cleanP || cleanP.includes(cleanK) || cleanK.includes(cleanP);
+  });
+  if (!matchedKey) return null;
+  return `${CDN_BASE}/${playerResourceIds[matchedKey]}.png`;
+};
 
 const DreamTeam = () => {
   const [letterClass, setLetterClass] = useState('text-animate');
   const [formation, setFormation] = useState('4-2-1-3');
   const [allPlayers, setAllPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [teamFilter, setTeamFilter] = useState('');
+  const [positionFilter, setPositionFilter] = useState('');
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -104,6 +125,17 @@ const DreamTeam = () => {
     ],
   };
 
+  // Derive unique teams and positions
+  const uniqueTeams = [...new Set(allPlayers.map(p => p.team))].filter(Boolean).sort();
+  const uniquePositions = [...new Set(allPlayers.map(p => p.position))].filter(Boolean).sort();
+
+  // Filter players
+  const filteredPlayers = allPlayers.filter(player => {
+    const matchesTeam = teamFilter ? player.team === teamFilter : true;
+    const matchesPos = positionFilter ? player.position === positionFilter : true;
+    return matchesTeam && matchesPos;
+  });
+
   return (
     <>
       <div className="container dreamteam-page">
@@ -169,20 +201,39 @@ const DreamTeam = () => {
           <div className="players-section">
             <div className="players-header">
               <h2>Available Players - LaLiga</h2>
+              <div className="filters flex gap-2 mt-2">
+                <select 
+                  value={teamFilter} 
+                  onChange={(e) => setTeamFilter(e.target.value)}
+                  className="bg-gray-800 text-white rounded p-1 text-sm border border-gray-600"
+                >
+                  <option value="">All Teams</option>
+                  {uniqueTeams.map(t => <option key={t} value={t}>{t}</option>)}
+                </select>
+                <select 
+                  value={positionFilter} 
+                  onChange={(e) => setPositionFilter(e.target.value)}
+                  className="bg-gray-800 text-white rounded p-1 text-sm border border-gray-600"
+                >
+                  <option value="">All Positions</option>
+                  {uniquePositions.map(p => <option key={p} value={p}>{p}</option>)}
+                </select>
+              </div>
             </div>
 
             <div className="players-grid">
               {loading ? (
                 <p style={{ color: '#999', textAlign: 'center', padding: '40px' }}>Loading players...</p>
-              ) : allPlayers.length > 0 ? (
-                allPlayers.map((player) => (
+              ) : filteredPlayers.length > 0 ? (
+                filteredPlayers.map((player) => (
                   <PlayerCard
                     key={player.id}
                     player={{
                       name: player.player_name,
                       position: player.position,
                       team: player.team,
-                      rating: 0 // Placeholder as API doesn't have rating yet
+                      rating: 0, // Placeholder as API doesn't have rating yet
+                      image: getPlayerImage(player.player_name)
                     }}
                     showAdd={true}
                   />
