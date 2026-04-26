@@ -7,61 +7,43 @@ const PlayerCard = ({ player, onClick, isSelected, showAdd = true }) => {
       className={`player-card ${isSelected ? 'selected' : ''}`}
       onClick={onClick}
     >
+      {/* Card image area */}
       <div className="card-inner">
-        {/* Rating Badge */}
-        <div className="rating-badge">
-          {player.rating}
-        </div>
-
-        {/* Position Badge */}
-        <div className="position-badge">
-          {player.position}
-        </div>
-
-        {/* Player Image */}
-        <div className="player-image">
+        {player.image ? (
           <img 
-            src={player.image || 'https://via.placeholder.com/150'} 
+            src={player.image} 
             alt={player.name}
+            className="fut-card-full-image"
             onError={(e) => {
-              e.target.src = 'https://via.placeholder.com/150';
+              // If image fails, show fallback bg with position text
+              e.target.style.display = 'none';
+              e.target.nextSibling.style.display = 'flex';
             }}
           />
+        ) : null}
+
+        {/* Fallback UI — always rendered, hidden when image exists */}
+        <div
+          className="card-fallback"
+          style={{ display: player.image ? 'none' : 'flex' }}
+        >
+          <div className="position-badge">{player.position}</div>
+          <div className="player-image">
+            <img src="/playercard.png" alt={player.name} />
+          </div>
         </div>
 
-        {/* Team Badge */}
-        <div className="team-badge">
-          <img 
-            src={player.teamBadge || 'https://via.placeholder.com/30'} 
-            alt={player.team}
-            onError={(e) => {
-              e.target.src = 'https://via.placeholder.com/30';
-            }}
-          />
-        </div>
-
-        {/* Player Name */}
-        <div className="player-name">
-          {player.name}
-        </div>
-
-        {/* League Badge */}
-        <div className="league-badge">
-          <img 
-            src={player.leagueBadge || 'https://via.placeholder.com/25'} 
-            alt="LaLiga"
-            onError={(e) => {
-              e.target.src = 'https://via.placeholder.com/25';
-            }}
-          />
-        </div>
+        {showAdd && !isSelected && (
+          <div className="add-overlay">
+            <span className="add-icon">+</span>
+          </div>
+        )}
       </div>
 
-      {showAdd && !isSelected && (
-        <div className="add-overlay">
-          <span className="add-icon">+</span>
-        </div>
-      )}
+      {/* Player name always shown below the card */}
+      <div className="card-name-label">
+        {player.name}
+      </div>
     </div>
   );
 };

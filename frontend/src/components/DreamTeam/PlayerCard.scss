@@ -1,53 +1,43 @@
 .player-card {
   position: relative;
   width: 140px;
-  height: 180px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.25s ease, filter 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
 
   &:hover {
-    transform: translateY(-5px) scale(1.05);
-    
+    transform: translateY(-6px) scale(1.05);
+    filter: drop-shadow(0 8px 20px rgba(255, 215, 0, 0.35));
+
     .add-overlay {
       opacity: 1;
     }
   }
 
   &.selected {
-    opacity: 0.5;
+    opacity: 0.45;
     pointer-events: none;
   }
 
   .card-inner {
     position: relative;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #ff1493 0%, #8b008b 100%);
-    border-radius: 12px;
-    padding: 10px;
+    width: 140px;
+    height: 190px;
+    background: transparent; /* FUT card art already has its own design */
+    border-radius: 8px;
+    overflow: hidden;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    justify-content: center;
 
-    // Different card colors based on rating
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: inherit;
-      border-radius: 12px;
-      opacity: 0.9;
-      z-index: 0;
-    }
-
-    * {
-      position: relative;
-      z-index: 1;
+    .fut-card-full-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
     }
   }
 
@@ -150,47 +140,81 @@
     }
   }
 
+  /* Fallback card — shown when no FUT image is available */
+  .card-fallback {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    border-radius: 8px;
+    border: 2px solid rgba(255, 215, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    .position-badge {
+      position: static;
+      background: rgba(255, 215, 0, 0.15);
+      color: #ffd700;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .player-image {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.05);
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.6;
+      }
+    }
+  }
+
+  /* Player name tag below the card */
+  .card-name-label {
+    width: 140px;
+    text-align: center;
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+    padding: 0 4px;
+  }
+
   .add-overlay {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
-    border-radius: 12px;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.25s ease;
+    backdrop-filter: blur(2px);
 
     .add-icon {
       color: #ffd700;
-      font-size: 3rem;
+      font-size: 2.5rem;
       font-weight: bold;
+      text-shadow: 0 0 20px rgba(255,215,0,0.6);
     }
-  }
-}
-
-// Card color variations based on rating
-.player-card[data-rating="99"],
-.player-card[data-rating="98"],
-.player-card[data-rating="97"] {
-  .card-inner {
-    background: linear-gradient(135deg, #ff1493 0%, #8b008b 100%);
-  }
-}
-
-.player-card[data-rating="96"],
-.player-card[data-rating="95"] {
-  .card-inner {
-    background: linear-gradient(135deg, #9370db 0%, #4b0082 100%);
-  }
-}
-
-.player-card[data-rating="92"],
-.player-card[data-rating="91"] {
-  .card-inner {
-    background: linear-gradient(135deg, #ff6347 0%, #dc143c 100%);
   }
 }
