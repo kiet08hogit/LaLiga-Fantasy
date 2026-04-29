@@ -12,24 +12,7 @@
     "start:prediction": "cd LaligaPrediction && python prediction.py",
     "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\" \"npm run start:prediction\""
   },
-  "dependencies": {
-    "axios": "^1.13.2",
-    "bcrypt": "^6.0.0",
-    "body-parser": "^2.2.1",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.3",
-    "express": "^5.1.0",
-    "joi": "^18.0.2",
-    "node-cron": "^4.2.1",
-    "pg": "^8.16.3",
-    "pg-hstore": "^2.3.4",
-    "react-router-dom": "^7.9.6",
-    "sequelize": "^6.37.7",
-    "socket.io": "^4.8.1",
-    "tailwindcss": "^4.1.17"
-  },
   "devDependencies": {
-    "concurrently": "^9.2.1",
-    "nodemon": "^3.1.11"
+    "concurrently": "^9.2.1"
   }
 }
