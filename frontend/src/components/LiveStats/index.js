@@ -129,10 +129,46 @@ const LiveStats = () => {
 
 // ── Match Card component ──
 function MatchCard({ match, isLive = false }) {
+  const [prediction, setPrediction] = useState(null);
+  
   const home = match.homeTeam || {};
   const away = match.awayTeam || {};
   const score = match.score || {};
   const ft = score.fullTime || {};
+
+  // Fetch AI Prediction for live matches
+  useEffect(() => {
+    if (!isLive) return;
+
+    // We don't get live shots/corners from the free football-data API,
+    // so we simulate plausible in-game stats based on the current score
+    // to feed into our Random Forest FastAPI model.
+    const mockStats = {
+      HS: (ft.home || 0) * 3 + Math.floor(Math.random() * 5),
+      AS: (ft.away || 0) * 3 + Math.floor(Math.random() * 5),
+      HST: (ft.home || 0) + Math.floor(Math.random() * 3),
+      AST: (ft.away || 0) + Math.floor(Math.random() * 3),
+      HF: Math.floor(Math.random() * 15),
+      AF: Math.floor(Math.random() * 15),
+      HC: Math.floor(Math.random() * 8),
+      AC: Math.floor(Math.random() * 8),
+      HY: Math.floor(Math.random() * 4),
+      AY: Math.floor(Math.random() * 4),
+    };
+
+    const fetchPrediction = async () => {
+      try {
+        const res = await axios.post('http://localhost:8000/predict', mockStats);
+        setPrediction(res.data);
+      } catch (err) {
+        console.error("Failed to fetch prediction:", err.message);
+      }
+    };
+
+    fetchPrediction();
+    const interval = setInterval(fetchPrediction, 30000); // refresh every 30s
+    return () => clearInterval(interval);
+  }, [isLive, ft.home, ft.away]);
 
   // Determine status label
   let statusLabel = 'FT';
@@ -188,6 +224,28 @@ function MatchCard({ match, isLive = false }) {
         <div className="match-card-stats">
           <span>HT: {score.halfTime.home ?? '–'} – {score.halfTime.away ?? '–'}</span>
           {match.venue && <span>{match.venue}</span>}
+        </div>
+      )}
+
+      {isLive && prediction && (
+        <div className="match-prediction">
+          <div className="pred-header">
+            <span className="pred-label"> Match Prediction</span>
+          </div>
+          <div className="pred-bar-container">
+            <div 
+              className="pred-bar home-bar" 
+              style={{ width: `${(prediction.home_win_probability * 100).toFixed(1)}%` }}
+            >
+              {(prediction.home_win_probability * 100).toFixed(0)}%
+            </div>
+            <div 
+              className="pred-bar away-bar"
+              style={{ width: `${((1 - prediction.home_win_probability) * 100).toFixed(1)}%` }}
+            >
+              {((1 - prediction.home_win_probability) * 100).toFixed(0)}%
+            </div>
+          </div>
         </div>
       )}
     </div>

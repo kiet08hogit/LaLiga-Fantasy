@@ -299,3 +299,59 @@
     font-size: 1rem;
   }
 }
+
+/* ── AI Prediction Bar ── */
+.match-prediction {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.pred-header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.pred-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #C4A747;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(196, 167, 71, 0.1);
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+.pred-bar-container {
+  display: flex;
+  height: 24px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.pred-bar {
+  display: flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: white;
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.home-bar {
+  background: linear-gradient(90deg, #1d4ed8, #3b82f6);
+  justify-content: flex-start;
+  padding-left: 12px;
+}
+
+.away-bar {
+  background: linear-gradient(90deg, #ef4444, #b91c1c);
+  justify-content: flex-end;
+  padding-right: 12px;
+}

@@ -35,7 +35,16 @@ export async function initializeDatabase(): Promise<boolean> {
       );
     `);
     console.log('✓ dream_team_players table created successfully');
-
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(100) UNIQUE NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        password_hash VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+    console.log('✓ users table created successfully');
     // Create indexes for better query performance
     await pool.query(`
       CREATE INDEX IF NOT EXISTS idx_dream_teams_user_id ON dream_teams(user_id);
@@ -67,3 +76,4 @@ export async function dropDreamTeamTables(): Promise<boolean> {
     return false;
   }
 }
+

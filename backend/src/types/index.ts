@@ -91,3 +91,12 @@ export interface UpdatePlayerData {
   position?: string;
   squadOrder?: number;
 }
+
+export interface User {
+  id: number;
+  username: string;
+  email: string;
+  password_hash: string;
+  refresh_token?: string;
+  created_at: Date;
+}
