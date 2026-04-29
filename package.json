@@ -7,10 +7,14 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:backend": "cd backend && npm run dev",
+    "start:frontend": "cd frontend && npm start",
+    "start:prediction": "cd LaligaPrediction && python prediction.py",
+    "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\" \"npm run start:prediction\""
   },
   "dependencies": {
     "axios": "^1.13.2",
+    "bcrypt": "^6.0.0",
     "body-parser": "^2.2.1",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
@@ -25,6 +29,7 @@
     "tailwindcss": "^4.1.17"
   },
   "devDependencies": {
+    "concurrently": "^9.2.1",
     "nodemon": "^3.1.11"
   }
 }
