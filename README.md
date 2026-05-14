@@ -1,3 +1,12 @@
+Demo pics:
+<img width="1919" height="911" alt="Screenshot 2026-05-13 210509" src="https://github.com/user-attachments/assets/b763dec5-93e0-48c7-ab11-573ee8d61463" />
+<img width="1919" height="910" alt="Screenshot 2026-05-13 210543" src="https://github.com/user-attachments/assets/d009534a-56f7-4f84-867d-0dbf1c3a8205" />
+<img width="1917" height="914" alt="Screenshot 2026-05-13 210550" src="https://github.com/user-attachments/assets/5114d66d-a785-4e8e-95e3-2dab1fdb33b4" />
+<img width="1778" height="750" alt="Screenshot 2026-05-13 210554" src="https://github.com/user-attachments/assets/e1896e8f-22bf-4113-b0f6-69a688d49808" />
+<img width="1919" height="916" alt="Screenshot 2026-05-13 210534" src="https://github.com/user-attachments/assets/adcf0da2-e282-4bde-85f2-3f53ad69f3e6" />
+<img width="1918" height="915" alt="Screenshot 2026-05-13 210602" src="https://github.com/user-attachments/assets/6cf4b270-ec3c-44e0-bbca-206a84ad7daa" />
+<img width="1919" height="912" alt="Screenshot 2026-05-13 210609" src="https://github.com/user-attachments/assets/66c5e79f-e418-4856-98a6-f237a263fc20" />
+
 # La Liga Fantasy
 
 A comprehensive fantasy football web application for La Liga featuring interactive analytics, lightning-fast team building, machine learning predictions, and rich player data management. Built with a TypeScript backend, React frontend, and a PostgreSQL database.
