@@ -136,12 +136,9 @@ function MatchCard({ match, isLive = false }) {
   const score = match.score || {};
   const ft = score.fullTime || {};
 
-  // Fetch AI Prediction for live matches
+  // Fetch AI Prediction
   useEffect(() => {
-    if (!isLive) return;
-
-    // We don't get live shots/corners from the free football-data API,
-    // so we simulate plausible in-game stats based on the current score
+    // We simulate plausible in-game stats based on the current score
     // to feed into our Random Forest FastAPI model.
     const mockStats = {
       HS: (ft.home || 0) * 3 + Math.floor(Math.random() * 5),
@@ -166,8 +163,12 @@ function MatchCard({ match, isLive = false }) {
     };
 
     fetchPrediction();
-    const interval = setInterval(fetchPrediction, 30000); // refresh every 30s
-    return () => clearInterval(interval);
+    
+    // Only set up a refresh interval if the match is actually live
+    if (isLive) {
+      const interval = setInterval(fetchPrediction, 30000); // refresh every 30s
+      return () => clearInterval(interval);
+    }
   }, [isLive, ft.home, ft.away]);
 
   // Determine status label
@@ -227,7 +228,7 @@ function MatchCard({ match, isLive = false }) {
         </div>
       )}
 
-      {isLive && prediction && (
+      {prediction && (
         <div className="match-prediction">
           <div className="pred-header">
             <span className="pred-label"> Match Prediction</span>
