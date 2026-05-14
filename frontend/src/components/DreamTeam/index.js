@@ -33,6 +33,18 @@ const DreamTeam = () => {
   const [teamFilter, setTeamFilter] = useState('');
   const [positionFilter, setPositionFilter] = useState('');
 
+  // ── NEW: Local Cache State ──
+  const [squad, setSquad] = useState(() => {
+    const saved = localStorage.getItem('dreamteam_squad');
+    return saved ? JSON.parse(saved) : {};
+  });
+  const [selectedSlotIndex, setSelectedSlotIndex] = useState(null);
+
+  // Save to local storage whenever squad changes
+  useEffect(() => {
+    localStorage.setItem('dreamteam_squad', JSON.stringify(squad));
+  }, [squad]);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setLetterClass('text-animate-hover');
@@ -136,6 +148,37 @@ const DreamTeam = () => {
     return matchesTeam && matchesPos;
   });
 
+  const handleAddPlayer = (player) => {
+    if (selectedSlotIndex === null) {
+      alert("Please click an empty slot on the pitch first to select a position!");
+      return;
+    }
+    
+    setSquad(prev => ({
+      ...prev,
+      [selectedSlotIndex]: player
+    }));
+    
+    // Automatically deselect the slot after adding
+    setSelectedSlotIndex(null);
+  };
+
+  const handleRemovePlayer = (e, index) => {
+    e.stopPropagation(); // prevent triggering the slot click
+    const newSquad = { ...squad };
+    delete newSquad[index];
+    setSquad(newSquad);
+  };
+
+  const handleFormationChange = (e) => {
+    setFormation(e.target.value);
+    // Optional: Clear squad on formation change to prevent misaligned positions
+    if (window.confirm("Changing formation will clear your current squad. Proceed?")) {
+      setSquad({});
+      setSelectedSlotIndex(null);
+    }
+  };
+
   return (
     <>
       <div className="container dreamteam-page">
@@ -152,17 +195,25 @@ const DreamTeam = () => {
           <div className="team-builder-section">
             <div className="builder-header">
               <h2>Dreamteam Builder</h2>
-              <div className="formation-selector">
-                <label>Formation</label>
-                <select
-                  value={formation}
-                  onChange={(e) => setFormation(e.target.value)}
-                  className="formation-dropdown"
+              <div className="flex gap-4 items-center">
+                <button 
+                  onClick={() => setSquad({})}
+                  className="bg-red-500/20 text-red-400 hover:bg-red-500/40 px-3 py-1 rounded text-sm transition-colors border border-red-500/30"
                 >
-                  {formations.map((f) => (
-                    <option key={f} value={f}>{f}</option>
-                  ))}
-                </select>
+                  Clear Team
+                </button>
+                <div className="formation-selector m-0">
+                  <label>Formation</label>
+                  <select
+                    value={formation}
+                    onChange={handleFormationChange}
+                    className="formation-dropdown"
+                  >
+                    {formations.map((f) => (
+                      <option key={f} value={f}>{f}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </div>
 
@@ -171,30 +222,48 @@ const DreamTeam = () => {
               <div className="formation-display">{formation}</div>
 
               {/* Player slots based on formation */}
-              {formationLayouts[formation].map((slot, index) => (
-                <div
-                  key={index}
-                  className="player-slot"
-                  style={{
-                    left: `${slot.x}%`,
-                    top: `${slot.y}%`,
-                  }}
-                >
-                  <div className="empty-card">
-                    <img src="/playercard.png" alt="Empty slot" />
-                    <div className="position-label">{slot.position}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
+              {formationLayouts[formation].map((slot, index) => {
+                const playerInSlot = squad[index];
+                const isSelected = selectedSlotIndex === index;
 
-            {/* Squad Stats - Will be implemented later */}
-            {/* <div className="squad-stats">
-              <div className="stat-item">
-                <span className="stat-label">Squad Rating</span>
-                <span className="stat-value">0</span>
-              </div>
-            </div> */}
+                return (
+                  <div
+                    key={index}
+                    className={`player-slot`}
+                    style={{
+                      left: `${slot.x}%`,
+                      top: `${slot.y}%`,
+                      cursor: 'pointer',
+                      transform: isSelected ? 'translate(-50%, -50%) scale(1.1)' : 'translate(-50%, -50%)',
+                      transition: 'transform 0.2s',
+                      filter: isSelected ? 'drop-shadow(0 0 10px rgba(234,179,8,0.8))' : 'none',
+                      zIndex: isSelected ? 10 : 1
+                    }}
+                    onClick={() => setSelectedSlotIndex(index)}
+                  >
+                    {playerInSlot ? (
+                      <div className="relative group">
+                        <PlayerCard 
+                          player={playerInSlot} 
+                          showAdd={false} 
+                        />
+                        <button 
+                          className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                          onClick={(e) => handleRemovePlayer(e, index)}
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="empty-card" style={{ borderColor: isSelected ? '#eab308' : 'rgba(255,255,255,0.2)' }}>
+                        <img src="/playercard.png" alt="Empty slot" />
+                        <div className="position-label" style={{ color: isSelected ? '#eab308' : '#fff' }}>{slot.position}</div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
           {/* Right Side - Available Players */}
@@ -219,6 +288,11 @@ const DreamTeam = () => {
                   {uniquePositions.map(p => <option key={p} value={p}>{p}</option>)}
                 </select>
               </div>
+              {selectedSlotIndex !== null && (
+                <div className="mt-2 text-yellow-400 text-sm font-semibold animate-pulse">
+                  Select a player below to add to slot {formationLayouts[formation][selectedSlotIndex].position}
+                </div>
+              )}
             </div>
 
             <div className="players-grid">
@@ -229,13 +303,22 @@ const DreamTeam = () => {
                   <PlayerCard
                     key={player.id}
                     player={{
+                      id: player.id,
                       name: player.player_name,
                       position: player.position,
                       team: player.team,
-                      rating: 0, // Placeholder as API doesn't have rating yet
+                      rating: 0,
                       image: getPlayerImage(player.player_name)
                     }}
                     showAdd={true}
+                    onClick={() => handleAddPlayer({
+                      id: player.id,
+                      name: player.player_name,
+                      position: player.position,
+                      team: player.team,
+                      rating: 0,
+                      image: getPlayerImage(player.player_name)
+                    })}
                   />
                 ))
               ) : (

@@ -8,36 +8,34 @@ import { useState } from 'react'
 
 const Sidebar = () => {
     const [showNav, setShowNav] = useState(false)
-    return(
-        <div className = 'nav-bar'> 
-            <Link className = "logo" to="/"> 
-                <img src = {LogoPL} alt="logo" />
-                <img className="sub-logo" src = {LogoSubtitle} alt="Liga Española" />
+    return (
+        <div className='nav-bar'>
+            <Link className="logo" to="/">
+                <img src={LogoPL} alt="logo" />
+                <img className="sub-logo" src={LogoSubtitle} alt="Liga Española" />
             </Link>
             <nav className={showNav ? 'mobile-show' : ""}>
-                <NavLink exact="true" activeclassname = "active" to="/">
-                    <FontAwesomeIcon icon = {faHome}  onClick={() => setShowNav(false)} />
+                <NavLink exact="true" activeclassname="active" to="/">
+                    <FontAwesomeIcon icon={faHome} onClick={() => setShowNav(false)} />
                 </NavLink>
-                <NavLink exact="true" activeclassname = "active" className = "livestats-link" to="/livestats">
-                    <FontAwesomeIcon icon = {faBroadcastTower} onClick={() => setShowNav(false)} />
+                <NavLink exact="true" activeclassname="active" className="livestats-link" to="/livestats">
+                    <FontAwesomeIcon icon={faBroadcastTower} onClick={() => setShowNav(false)} />
                 </NavLink>
-                <NavLink exact="true" activeclassname = "active" className = "teams-link" to="/teams">
-                    <FontAwesomeIcon icon = {faUsers} onClick={() => setShowNav(false)}/>
+                <NavLink exact="true" activeclassname="active" className="teams-link" to="/teams">
+                    <FontAwesomeIcon icon={faUsers} onClick={() => setShowNav(false)} />
                 </NavLink>
-                <NavLink exact="true" activeclassname = "active" className = "position-link" to="/position">
-                    <FontAwesomeIcon icon = {faTshirt}  onClick={() => setShowNav(false)}/>
+                <NavLink exact="true" activeclassname="active" className="position-link" to="/position">
+                    <FontAwesomeIcon icon={faTshirt} onClick={() => setShowNav(false)} />
                 </NavLink>
-                 <NavLink exact="true" activeclassname = "active" className = "trophy-link" to="/champions">
-                    <FontAwesomeIcon icon = {faTrophy} onClick={() => setShowNav(false)} />
+                <NavLink exact="true" activeclassname="active" className="trophy-link" to="/champions">
+                    <FontAwesomeIcon icon={faTrophy} onClick={() => setShowNav(false)} />
+                </NavLink>  
+                <NavLink exact="true" activeclassname="active" className="dreamteam-link" to="/dreamteam">
+                    <FontAwesomeIcon icon={faUsersGear} onClick={() => setShowNav(false)} />
                 </NavLink>
-                <NavLink exact="true" activeclassname = "active" className = "dreamteam-link" to="/dreamteam">
-                    <FontAwesomeIcon icon = {faUsersGear} onClick={() => setShowNav(false)} />
-                </NavLink>
-                <NavLink exact="true" activeclassname = "active" className = "search-link" to="/search">
-                    <FontAwesomeIcon icon = {faSearch} onClick={() => setShowNav(false)} />
-                </NavLink>
-               
-                <FontAwesomeIcon icon = {faClose} size = "3x" className="close-icon" onClick={() => setShowNav(false)} />
+
+
+                <FontAwesomeIcon icon={faClose} size="3x" className="close-icon" onClick={() => setShowNav(false)} />
             </nav>
             <FontAwesomeIcon onClick={() => setShowNav(true)} icon={faBars} color="#ffd700" size="3x" className="hamburger-icon" />
         </div>

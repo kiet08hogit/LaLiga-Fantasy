@@ -7,8 +7,7 @@ import Teams from './components/Teams';
 import TeamData from './components/TeamData';
 
 import Position from "./components/Position";
-import Search from "./components/Search";
-import LiveStats from "./components/LiveStats";
+  import LiveStats from "./components/LiveStats";
 import Champion from './components/Champion';
 import DreamTeam from './components/DreamTeam';
 
@@ -28,7 +27,6 @@ function App() {
           <Route path="livestats" element={<LiveStats />} />
           <Route path="champions" element={<Champion />} />
           <Route path="dreamteam" element={<DreamTeam />} />
-          <Route path="search" element={<Search />} />
         </Route>
       </Routes>
     </>
