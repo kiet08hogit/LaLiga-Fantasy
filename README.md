@@ -6,6 +6,7 @@ Demo pics:
 <img width="1919" height="916" alt="Screenshot 2026-05-13 210534" src="https://github.com/user-attachments/assets/adcf0da2-e282-4bde-85f2-3f53ad69f3e6" />
 <img width="1918" height="915" alt="Screenshot 2026-05-13 210602" src="https://github.com/user-attachments/assets/6cf4b270-ec3c-44e0-bbca-206a84ad7daa" />
 <img width="1919" height="912" alt="Screenshot 2026-05-13 210609" src="https://github.com/user-attachments/assets/66c5e79f-e418-4856-98a6-f237a263fc20" />
+<img width="1745" height="909" alt="Screenshot 2026-05-13 205506" src="https://github.com/user-attachments/assets/4ac8d22c-8692-4587-8405-c9f4d405ca89" />
 
 # La Liga Fantasy
 
